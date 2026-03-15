@@ -6,15 +6,18 @@ from create_dat_files import CreatorDatFiles
 # Diretório base
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DADOS_DIR = os.path.join(BASE_DIR, "Dados")
+MUNCIPIO = "Lagoa Santa"    #["Divinopolis"#"Montes Claros" #"Lagoa Santa", "Contagem"]
 PASTAS = {
     'todos_municipios': os.path.join(DADOS_DIR, "Dados_todos_municipios"),
-    'lagoa_santa': os.path.join(DADOS_DIR, "Dados Lagoa Santa/dados_brutos")
+    MUNCIPIO: os.path.join(DADOS_DIR, f"{MUNCIPIO}/dados_brutos")
 }   
 
 if __name__ == "__main__":
-    municipio = "Lagoa Santa"
+    municipio = MUNCIPIO
+    arquivo_setor_censitario = f"dados_setor_censitario_{MUNCIPIO.upper()}.xlsx"
+    arquivo_json_distancias = r"C:\Users\marce\OneDrive\Área de Trabalho\aps\GeraDadosAPS\Dados\Contagem\dados_brutos\Contagem_matrix_results_full_matrix.json" #f"{MUNCIPIO}_distance.json"
     configs = ConfigurationDataScenario(
-        municipio = municipio,
+        municipio = MUNCIPIO,
         budget = 164300000,
         I_L1 = 3818078,
         raios_criticos = {
@@ -28,7 +31,7 @@ if __name__ == "__main__":
         equipes_saude_primario = ["eSF", "eSB", "eMulti"],
         equipes_saude_secundario = ["EQ2"],
         equipes_saude_terciario = ["EQ3"],
-        name_output_file = "Lagoa_Santa",
+        name_output_file = "Lagoa Santa",
         maximo_de_unidades_abertas = {"1": 10, "2": 1, "3": 1},
         encaminhamentos_primeiro_nivel = {"1": 0.71, "2": 0.20, "3": 0.05},
         encaminhamentos_segundo_nivel = {"1": 0.65, "2": 0.20, "3": 0.10},
@@ -41,12 +44,13 @@ if __name__ == "__main__":
     )
 
     paths_arquivos = PathArquivoDados(
-        path_arquivo_setores_censitarios=os.path.join(PASTAS['lagoa_santa'], "dados_setor_censitario_LAGOA_SANTA.xlsx"),
+        path_arquivo_setores_censitarios=os.path.join(PASTAS[municipio], arquivo_setor_censitario),
         path_dados_IVS=os.path.join(PASTAS['todos_municipios'], "dados_IVS.xlsx"),
-        path_equipes_PHC=os.path.join(PASTAS['lagoa_santa'], "v02_Equipe.xlsx"),
+        path_equipes_PHC=os.path.join(PASTAS[municipio], "v02_Equipe.xlsx"),
         path_setores_com_UBS=os.path.join(PASTAS['todos_municipios'], "setores_com_ubs.xlsx"),
-        path_json_distances = os.path.join(PASTAS['lagoa_santa'], "lagoa_santa_distance_test.json"),
-        path_arquivos_dat_final = os.path.join(PASTAS['lagoa_santa']),
+        #path_json_distances = os.path.join(PASTAS[municipio], arquivo_json_distancias),
+        path_arquivos_dat_final = os.path.join(PASTAS[municipio]),
+        path_cluster_CSV = os.path.join(PASTAS['todos_municipios'], "sector_cluster_by_uf.csv")
     )
 
 
@@ -54,3 +58,6 @@ if __name__ == "__main__":
     creator.create_file()
 
 
+    #Primeiro: Gerar novamente divinopolis com mais unidades secundarias
+    #Segundo: Gerar dados de outros municipios com distancia haversine (sem arquivos base do joao!).
+    

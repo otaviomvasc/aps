@@ -1,5 +1,7 @@
 from dataclasses import dataclass
 from re import S
+from enum import Enum, auto
+
 
 @dataclass
 class ConfigurationDataScenario:
@@ -31,3 +33,7 @@ class PathArquivoDados:
     path_setores_com_UBS:str
     path_json_distances:str = None
     path_arquivos_dat_final:str = None
+    path_cluster_CSV:str = None
+
+
+

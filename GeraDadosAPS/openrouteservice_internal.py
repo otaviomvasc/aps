@@ -449,7 +449,7 @@ class ORSMatrixClient:
 def main():
     # Replace with your OpenRouteService API key
     # You can get a free API key at: https://openrouteservice.org/dev/#/signup
-    API_KEY = "5b3ce3597851110001cf62487cf120e8b42a44379bf9e0833928b80c"
+    API_KEY = "eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6IjE3ZTc0NTA2MjIzOTQ2MTliN2JmN2UwMmY1ODFmYTAzIiwiaCI6Im11cm11cjY0In0="
     
     if API_KEY == "YOUR_ORS_API_KEY_HERE":
         print("ERROR: Please replace 'YOUR_ORS_API_KEY_HERE' with your actual OpenRouteService API key")

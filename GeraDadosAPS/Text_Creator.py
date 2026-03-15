@@ -330,7 +330,7 @@ class text_messages_creator():
 
     def create_param_C2_text(self):
         header_text = "param C2:=\n"
-        text = "SHC1	40000\n"
+        text = "SHC1	400000\n" #TODO: Aumentando para nao dar infeasible no modelo. Valor original 40000
         self.texts_variables.append(header_text)
         self.texts_variables.append(text)
         self.texts_variables.append(self.dot_vig)

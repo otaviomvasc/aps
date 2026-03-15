@@ -35,7 +35,8 @@ class CreatorDatFiles():
 
         writer = text_writer(texts_list, text_list_distance, name_arch)
         writer.write_mutable_arch()
-        writer.write_distance_arch()
+        if self.create_distance_file:
+            writer.write_distance_arch()
 
 
 

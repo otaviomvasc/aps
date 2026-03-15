@@ -1,10 +1,11 @@
 import pandas as pd
 import json
 import time
+import math
 from openrouteservice_internal import ORSMatrixClient
 import openrouteservice
 
-API_KEY = "5b3ce3597851110001cf62487cf120e8b42a44379bf9e0833928b80c"
+API_KEY = "eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6IjE3ZTc0NTA2MjIzOTQ2MTliN2JmN2UwMmY1ODFmYTAzIiwiaCI6Im11cm11cjY0In0="
 
 class DistanceAPICalculator:
     def __init__(self, path_jsons_instances, df_setor_censitario):
@@ -12,13 +13,14 @@ class DistanceAPICalculator:
         self.df_setor_censitario = df_setor_censitario
         self.json_dist_format = dict()
         self.client = ORSMatrixClient(api_key=API_KEY, profile='driving-car')
+        self.mun_name = self.df_setor_censitario.MUNICIPIO.unique().tolist()[0]
     
     def build(self):
         self.create_origin_dest_PHC_SC()
         self.create_origin_dest_SC_to_SC()
         self.read_and_format_json()
-        dist_PHC_SC = self.get_distances(self.origin_dest_PHC_SC)
-        dist_SC_SC = self.get_distances(self.origin_dest_SC_to_SC)
+        dist_PHC_SC, setores_sem_distancia_PHC = self.get_distances(self.origin_dest_PHC_SC)
+        dist_SC_SC, setores_sem_distancia_SC = self.get_distances(self.origin_dest_SC_to_SC)
         
         return dist_PHC_SC, dist_SC_SC
 
@@ -30,13 +32,13 @@ class DistanceAPICalculator:
         for o_id, o_lat, o_long in zip(SC_id, SC_lat, SC_long):
             self.data_dist["sectors"].append({"setor": o_id, "latitude": o_lat, "longitude": o_long})
 
-        self.name_instance_data_matriz = "lagoa_santa_teste.json" #TODO: Parametrizar isso!
-        with open("lagoa_santa_teste.json", "w", encoding="utf-8") as f:
+        self.name_instance_data_matriz = f"{self.mun_name}.json"
+        with open(self.name_instance_data_matriz, "w", encoding="utf-8") as f:
             json.dump(self.data_dist, f)
 
     def get_full_dist_matriz_from_API(self):
-       
-        output_file_distance = "lagoa_santa_distance_test.json"
+        self.mun_name = self.df_setor_censitario.MUNICIPIO.unique().tolist()[0]
+        output_file_distance = f"{self.mun_name}_distance_generated.json"
         try:
             # Choose your batching strategy:
             
@@ -160,14 +162,16 @@ class DistanceAPICalculator:
             )
 
     def _fetch_distance_with_fallback(self, dt):
-        time.sleep(0.1)  # rate limit
+        #time.sleep(0.1)  # rate limit
 
         try:
-            return self.get_distance_in_API(dt)
+            #return self.get_distance_in_API(dt)
+            return self.get_calculate_aproximated_distance(dt)
         except Exception:
             return self.get_calculate_aproximated_distance(dt)
 
     def get_distances(self, origin_dest_PHC_SC):
+        setores_sem_distancias = list()
         dict_dist_final = list()
         for (sc_origem, sc_destino), dt in origin_dest_PHC_SC.items():
             if sc_origem == sc_destino:
@@ -177,6 +181,7 @@ class DistanceAPICalculator:
 
                 if dist is None:
                     print(f"fallback_{sc_origem}_{sc_destino}")
+                    setores_sem_distancias.append(sc_origem)
                     dist = self._fetch_distance_with_fallback(dt)
 
                 dict_dist_final.append({
@@ -185,16 +190,30 @@ class DistanceAPICalculator:
                     "distancia": dist
                 })
 
-        return dict_dist_final
+        return dict_dist_final, setores_sem_distancias
 
-    def get_calculate_aproximated_distance(self, dt):
-        pass
-    
+    def get_calculate_aproximated_distance(self, dados_og):
+        origem = (dados_og["origin"]["long"], dados_og["origin"]["lat"])
+        destino = (dados_og["destination"]["long"], dados_og["destination"]["lat"])
+
+        lon1, lat1 = map(math.radians, origem)
+        lon2, lat2 = map(math.radians, destino)
+
+        dlon = lon2 - lon1
+        dlat = lat2 - lat1
+
+        a = math.sin(dlat / 2) ** 2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlon / 2) ** 2
+        c = 2 * math.asin(math.sqrt(a))
+
+        raio_terra_m = 6371000  # raio médio da Terra em metros
+        distancia_m = raio_terra_m * c
+        print("usando distancia haversine!")
+        return distancia_m
 
     def get_distance_in_API(self, dados_og):
         # Origem e destino (lon, lat)
         origem = (dados_og["origin"]["long"], dados_og["origin"]["lat"])
-        destino = (dados_og["destination"]["long"], dados_og["origin"]["lat"])
+        destino = (dados_og["destination"]["long"], dados_og["destination"]["lat"])
         client = openrouteservice.Client(key=API_KEY)
         rota = client.directions(
             coordinates=[origem, destino],
@@ -204,6 +223,7 @@ class DistanceAPICalculator:
 
         #dist_m = rota['routes'][0]['summary']['distance']
         dist_m = rota['routes'][0]['segments'][0]['distance']
+        print(f"Distancia: {dist_m} metros")
         return dist_m
 
 
