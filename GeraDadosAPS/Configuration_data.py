@@ -3,6 +3,10 @@ from re import S
 from enum import Enum, auto
 
 
+class ExecutionDataType(Enum):
+    BY_CLUSTER = "cluster"
+    BY_SETOR_CENSITARIO = "setor_censitario"
+
 @dataclass
 class ConfigurationDataScenario:
     municipio: str
@@ -23,6 +27,7 @@ class ConfigurationDataScenario:
     maximo_atendimentos_telemedicina:dict
     maximo_deslocamento: dict
     name_output_file_distancias: str
+    tipo_rodada: ExecutionDataType = ExecutionDataType.BY_CLUSTER
 
 
 @dataclass
@@ -31,6 +36,7 @@ class PathArquivoDados:
     path_dados_IVS:str
     path_equipes_PHC:str
     path_setores_com_UBS:str
+    path_porte_UBS: str
     path_json_distances:str = None
     path_arquivos_dat_final:str = None
     path_cluster_CSV:str = None

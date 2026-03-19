@@ -1,5 +1,5 @@
-from Configuration_data import ConfigurationDataScenario, PathArquivoDados
-from Text_Creator import text_messages_creator
+from Configuration_data import ConfigurationDataScenario, PathArquivoDados, ExecutionDataType
+from Text_Creator import text_messages_creator_By_SC, text_messages_creator_By_Cluster
 from scenario_data_builder import ScenarioDataBuilder
 from writer_text_in_file import text_writer
 
@@ -30,7 +30,10 @@ class CreatorDatFiles():
 
         name_arch = self.configuration_data.name_output_file
 
-        formatter = text_messages_creator(scenario_data)
+        if  self.configuration_data.tipo_rodada == ExecutionDataType.BY_CLUSTER:
+            formatter = text_messages_creator_By_Cluster(scenario_data)
+        else: 
+            formatter = text_messages_creator_By_SC(scenario_data)
         texts_list, text_list_distance = formatter.create_texts()
 
         writer = text_writer(texts_list, text_list_distance, name_arch)
