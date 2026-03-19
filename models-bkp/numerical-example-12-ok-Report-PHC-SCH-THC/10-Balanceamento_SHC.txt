@@ -1,0 +1,2 @@
+Loc	Team	CNES	Req	Transf	New	Res	Surp	Def
+[SHC1]	EQ2	10.0	8.29	0.0	8.0	18.0	10.0	0.3

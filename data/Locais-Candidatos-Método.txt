@@ -1,0 +1,104 @@
+Pessoal, encaminho a lista preliminar e o html com os setores candidatos. A base teórica dessa lista são os setores ABNC (areas de baixa ou nenhuma cobertura), sendo selecionados 10% destes setores atraves dos criterios: ,aior extensao territorial, maiorr densidade populacional e setores mais centrais dentro de vazios ocupacionais., com pesos 03,04 e 0,3 respectivamente. 
+
+O raio considerado para determinação do vazio assistencial foi R > 1,0km. 
+
+Dados Montes Claros 
+===============================================================================================      
+ETAPA 2 | CHECKS
+===============================================================================================      
+[OK] N_setores_total                         = 864
+[OK] N_CNES_rede_existente (df_dist)         = 88
+[OK] N_setores_com_UBS (via argmin por CNES) = 78
+[OK] ABNC (vácuo > 1.0 km)       = 112
+[OK] Top alvo = ceil(0.1 * 864) = 87
+[OK] Candidatos selecionados (ABNC)         = 87
+[EXPORT] montes_claros__ranking_abnc.csv
+[EXPORT] montes_claros__candidatos_top.csv
+[EXPORT] montes_claros__audit_google_maps.csv
+===============================================================================================      
+
+Dados Divinópolis 
+===============================================================================================      
+ETAPA 2 | CHECKS
+===============================================================================================      
+[OK] N_setores_total                         = 548
+[OK] N_CNES_rede_existente (df_dist)         = 44
+[OK] N_setores_com_UBS (via argmin por CNES) = 32
+[OK] ABNC (vácuo > 1.0 km)       = 317
+[OK] Top alvo = ceil(0.1 * 548) = 55
+[OK] Candidatos selecionados (ABNC)         = 55
+[EXPORT] divinopolis__ranking_abnc.csv
+[EXPORT] divinopolis__candidatos_top.csv
+[EXPORT] divinopolis__audit_google_maps.csv
+===============================================================================================
+
+Dados  Lagoa Santa 
+===============================================================================================      
+ETAPA 2 | CHECKS
+===============================================================================================      
+[OK] N_setores_total                         = 257
+[OK] N_CNES_rede_existente (df_dist)         = 19
+[OK] N_setores_com_UBS (via argmin por CNES) = 19
+[OK] ABNC (vácuo > 1.0 km)       = 66
+[OK] Top alvo = ceil(0.1 * 257) = 26
+[OK] Candidatos selecionados (ABNC)         = 26
+[EXPORT] lagoa_santa__ranking_abnc.csv
+[EXPORT] lagoa_santa__candidatos_top.csv
+[EXPORT] lagoa_santa__audit_google_maps.csv
+===============================================================================================
+
+Dados Contagem 
+===============================================================================================      
+[OK] N_setores_total                         = 1305
+[OK] N_CNES_rede_existente (df_dist)         = 76
+[OK] N_setores_com_UBS (via argmin por CNES) = 68
+[OK] ABNC (vácuo > 1.0 km)       = 156
+[OK] Top alvo = ceil(0.1 * 1305) = 131
+[OK] Candidatos selecionados (ABNC)         = 131
+[EXPORT] contagem__ranking_abnc.csv
+[EXPORT] contagem__candidatos_top.csv
+[EXPORT] contagem__audit_google_maps.csv
+===============================================================================================      
+
+Dados BH  
+===============================================================================================      
+ETAPA 2 | CHECKS
+===============================================================================================      
+[OK] N_setores_total                         = 5137
+[OK] N_CNES_rede_existente (df_dist)         = 156
+[OK] N_setores_com_UBS (via argmin por CNES) = 147
+[OK] ABNC (vácuo > 1.0 km)       = 640
+[OK] Top alvo = ceil(0.1 * 5137) = 514
+[OK] Candidatos selecionados (ABNC)         = 514
+[EXPORT] belo_horizonte__ranking_abnc.csv
+[EXPORT] belo_horizonte__candidatos_top.csv
+[EXPORT] belo_horizonte__audit_google_maps.csv
+===============================================================================================      
+
+Estrutura do arquivo de ranking
+
+O arquivo contém 13 colunas organizadas em 3 grupos:
+
+Dados do setor:
+
+    id_setor: Código do setor censitário (IBGE)
+    populacao: População residente
+    ivs: Índice de Vulnerabilidade Social (0 a 1)
+    area_km2: Área em quilômetros quadrados
+    dens_pop_km2: Densidade populacional (habitantes/km²)
+
+Dados de localização:
+
+    min_dist_exist_km: Distância até a UBS mais próxima (km)
+    cnes_mais_proxima: Código CNES da UBS mais próxima
+    centralidade_km: Distância utilizada no cálculo do score
+
+Dados do ranking:
+
+    n_area: Área normalizada (escala 0-1)
+    n_dens: Densidade normalizada (escala 0-1)
+    n_cent: Centralidade normalizada (escala 0-1)
+    score: Score final = 0,30×área + 0,40×densidade + 0,30×centralidade
+    rank_abnc: Posição no ranking (1 = maior prioridade) 
+
+====================================================================

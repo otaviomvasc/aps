@@ -1,0 +1,2830 @@
+#############################################################################
+# Project CNPq: Increasing PHC with team sizing
+# Author: João Flávio de Freitas Almeida <joao.flavio@dep.ufmg.br>
+# LEPOINT: Laboratório de Estudos em Planejamento de Operações Integradas
+# Departamento de Engenharia de Produção
+# Universidade Federal de Minas Gerais - Escola de Engenharia
+#############################################################################
+# Health Care Facility Location Problem: Considering fixed facilities,
+# choose intermediate facilities according a criteria that improve service
+# quality. Consider health care teams.
+#############################################################################
+# glpsol -m aps.mod -d LS.dat --cuts
+
+#############################################################################
+# DADOS REFERENTES AO MUNICIPIO DE: 
+# Contagem 
+#############################################################################
+data;
+param BUDGET := 2493980414000; # Overall budget constraint ($/year)
+param I_L1 := 3818078;
+param: K: Dmax :=
+1         5000 # PHC: Primary health care (basic care)
+2         30000 # SHC: Secondary health care (intermediate care)
+3         35000 # THC: Tertiary health care (hospital care)
+;
+set CL[1] :=
+CL_cluster_948 
+CL_cluster_952 
+CL_cluster_956 
+CL_cluster_1001 
+CL_cluster_1175 
+CL_cluster_1177 
+CL_cluster_1178 
+CL_cluster_1205 
+CL_cluster_1233 
+CL_cluster_1818 
+CL_cluster_1821 
+CL_cluster_1826 
+CL_cluster_1889 
+CL_cluster_1894 
+CL_cluster_2922 
+CL_cluster_2923 
+CL_cluster_2925 
+CL_cluster_2926 
+CL_cluster_2927 
+CL_cluster_2928 
+CL_cluster_2929 
+CL_cluster_2930 
+CL_cluster_2931 
+CL_cluster_2932 
+CL_cluster_2933 
+CL_cluster_2934 
+CL_cluster_2935 
+CL_cluster_2936 
+CL_cluster_2937 
+CL_cluster_2938 
+CL_cluster_2939 
+CL_cluster_2940 
+CL_cluster_2941 
+CL_cluster_2942 
+CL_cluster_2943 
+CL_cluster_2944 
+CL_cluster_2945 
+CL_cluster_2946 
+CL_cluster_2947 
+CL_cluster_2948 
+CL_cluster_2949 
+CL_cluster_2950 
+CL_cluster_2951 
+CL_cluster_2952 
+CL_cluster_2953 
+CL_cluster_2954 
+CL_cluster_2955 
+CL_cluster_2956 
+CL_cluster_2957 
+CL_cluster_2958 
+CL_cluster_2959 
+CL_cluster_2960 
+CL_cluster_2961 
+CL_cluster_2962 
+CL_cluster_2963 
+CL_cluster_2964 
+CL_cluster_2965 
+CL_cluster_2966 
+CL_cluster_2967 
+CL_cluster_2968 
+CL_cluster_2969 
+CL_cluster_2970 
+CL_cluster_2971 
+CL_cluster_2972 
+CL_cluster_2973 
+CL_cluster_2974 
+CL_cluster_2975 
+CL_cluster_2976 
+CL_cluster_2977 
+CL_cluster_2978 
+CL_cluster_2979 
+CL_cluster_2980 
+CL_cluster_2981 
+CL_cluster_2982 
+CL_cluster_2983 
+CL_cluster_2984 
+CL_cluster_2985 
+CL_cluster_2986 
+CL_cluster_2987 
+CL_cluster_2988 
+CL_cluster_2989 
+CL_cluster_2990 
+CL_cluster_2991 
+CL_cluster_2992 
+CL_cluster_2993 
+CL_cluster_2994 
+CL_cluster_2995 
+CL_cluster_2996 
+CL_cluster_2997 
+CL_cluster_2998 
+CL_cluster_2999 
+CL_cluster_3000 
+CL_cluster_3001 
+CL_cluster_3002 
+CL_cluster_3003 
+CL_cluster_3004 
+CL_cluster_3005 
+CL_cluster_3006 
+CL_cluster_3007 
+CL_cluster_3008 
+CL_cluster_3009 
+CL_cluster_3010 
+CL_cluster_3011 
+CL_cluster_3012 
+CL_cluster_3013 
+CL_cluster_3014 
+CL_cluster_3015 
+CL_cluster_3016 
+CL_cluster_3017 
+CL_cluster_3018 
+CL_cluster_3019 
+CL_cluster_3020 
+CL_cluster_3021 
+CL_cluster_3022 
+CL_cluster_3023 
+CL_cluster_3024 
+CL_cluster_3025 
+CL_cluster_3026 
+CL_cluster_3027 
+CL_cluster_3028 
+CL_cluster_3029 
+CL_cluster_3030 
+CL_cluster_3031 
+CL_cluster_3032 
+CL_cluster_3033 
+CL_cluster_3034 
+CL_cluster_3035 
+CL_cluster_3036 
+CL_cluster_3037 
+CL_cluster_3038 
+CL_cluster_3039 
+CL_cluster_3040 
+CL_cluster_3041 
+CL_cluster_3042 
+CL_cluster_3043 
+CL_cluster_3044 
+CL_cluster_3045 
+CL_cluster_3046 
+CL_cluster_3047 
+CL_cluster_3048 
+CL_cluster_3049 
+CL_cluster_3050 
+CL_cluster_3051 
+CL_cluster_3052 
+CL_cluster_3053 
+CL_cluster_3054 
+CL_cluster_3055 
+CL_cluster_3056 
+CL_cluster_3057 
+CL_cluster_3058 
+CL_cluster_3059 
+CL_cluster_3060 
+CL_cluster_3061 
+CL_cluster_3062 
+CL_cluster_3063 
+CL_cluster_3064 
+CL_cluster_3065 
+CL_cluster_3066 
+CL_cluster_3067 
+CL_cluster_3068 
+CL_cluster_3069 
+CL_cluster_3070 
+CL_cluster_3071 
+CL_cluster_3072 
+CL_cluster_3073 
+CL_cluster_3074 
+CL_cluster_3075 
+CL_cluster_3076 
+CL_cluster_3077 
+CL_cluster_3078 
+CL_cluster_3079 
+CL_cluster_3080 
+CL_cluster_3081 
+CL_cluster_3082 
+CL_cluster_3083 
+CL_cluster_3084 
+CL_cluster_3085 
+CL_cluster_3086 
+CL_cluster_3087 
+CL_cluster_3088 
+CL_cluster_3089 
+CL_cluster_3090 
+CL_cluster_3091 
+CL_cluster_3092 
+CL_cluster_3093 
+CL_cluster_3094 
+CL_cluster_3095 
+CL_cluster_3096 
+CL_cluster_3097 
+CL_cluster_3098 
+CL_cluster_3099 
+CL_cluster_3100 
+CL_cluster_3101 
+CL_cluster_3102 
+CL_cluster_3103 
+CL_cluster_3104 
+CL_cluster_3105 
+CL_cluster_3106 
+CL_cluster_3107 
+CL_cluster_3108 
+CL_cluster_3109 
+CL_cluster_3110 
+CL_cluster_3111 
+CL_cluster_3112 
+CL_cluster_3113 
+CL_cluster_3114 
+CL_cluster_3115 
+CL_cluster_3204 
+CL_cluster_3205 
+CL_cluster_3212 
+CL_cluster_3711 
+CL_cluster_3731 
+CL_cluster_3732 
+CL_cluster_7797 
+CL_cluster_7876 
+CL_cluster_7904 
+CL_cluster_7923 
+;
+
+set CL[2] := ;
+set CL[3] := ;
+# Basic health care units teams (PHC)
+set E[1] :=
+eSF
+eSB
+eMulti
+ACS
+;
+
+# Intermediate health care units teams (SHC)
+set E[2] :=
+EQ2
+;
+
+set E[3] :=
+EQ3
+;
+
+set EL[1] := 
+3118602190990
+3118602191229
+3118602190591
+3118602190567
+3118602190532
+3118602190494
+3118602190869
+3118602190605
+3118602190109
+3118607116306
+3118602190931
+3118602190923
+3118602190893
+3118602190486
+3118602190915
+3118602190222
+3118604696077
+3118602191024
+3118602190478
+3118602190389
+3118607110316
+3118602220261
+3118602190397
+3118602190176
+3118602191059
+3118602191040
+3118602190451
+3118602190206
+3118602190966
+3118602190400
+3118602190877
+3118602190826
+3118602190729
+3118602190656
+3118602190834
+3118602190710
+3118602190796
+3118602190648
+3118602190818
+3118602190885
+3118607053355
+;
+
+set EL[2] := SHC1;
+set EL[3] := THC1;
+# of type p at demand point i and 
+# vulnerability V (the higher vulnerability, the worse)
+# id_setor	populacao	IVS
+param: I:       W   IVS:=	
+# 948.0 336.0 0.473 
+# 952.0 637.0 0.475 
+# 956.0 1234.0 0.476 
+# 1001.0 737.0 0.48 
+# 1175.0 654.0 0.49 
+# 1177.0 600.0 0.486 
+# 1178.0 999.0 0.443 
+# 1205.0 1004.0 0.449 
+# 1233.0 497.0 0.443 
+# 1818.0 464.0 0.471 
+# 1821.0 1172.0 0.472 
+# 1826.0 2202.0 0.464 
+# 1889.0 124.0 0.465 
+# 1894.0 1415.0 0.437 
+# 2922.0 429.0 0.468 
+# 2923.0 2146.0 0.482 
+# 2925.0 2868.0 0.463 
+# 2926.0 2037.0 0.463 
+# 2927.0 2539.0 0.467 
+# 2928.0 1412.0 0.481 
+# 2929.0 3436.0 0.469 
+# 2930.0 298.0 0.459 
+# 2931.0 2179.0 0.469 
+# 2932.0 3645.0 0.51 
+# 2933.0 2749.0 0.479 
+# 2934.0 2498.0 0.478 
+# 2935.0 2878.0 0.506 
+# 2936.0 2748.0 0.499 
+# 2937.0 2832.0 0.463 
+# 2938.0 2490.0 0.51 
+# 2939.0 372.0 0.434 
+# 2940.0 991.0 0.458 
+# 2941.0 2933.0 0.476 
+# 2942.0 2129.0 0.447 
+# 2943.0 2965.0 0.46 
+# 2944.0 2033.0 0.464 
+# 2945.0 2862.0 0.467 
+# 2946.0 1244.0 0.493 
+# 2947.0 2447.0 0.499 
+# 2948.0 2333.0 0.526 
+# 2949.0 2793.0 0.483 
+# 2950.0 2229.0 0.496 
+# 2951.0 258.0 0.416 
+# 2952.0 1872.0 0.374 
+# 2953.0 2995.0 0.478 
+# 2954.0 1278.0 0.473 
+# 2955.0 2266.0 0.474 
+# 2956.0 2460.0 0.493 
+# 2957.0 2226.0 0.479 
+# 2958.0 2990.0 0.474 
+# 2959.0 727.0 0.51 
+# 2960.0 2015.0 0.472 
+# 2961.0 2836.0 0.427 
+# 2962.0 2822.0 0.468 
+# 2963.0 780.0 0.505 
+# 2964.0 2730.0 0.476 
+# 2965.0 1152.0 0.474 
+# 2966.0 2451.0 0.491 
+# 2967.0 1146.0 0.486 
+# 2968.0 2740.0 0.491 
+# 2969.0 2506.0 0.503 
+# 2970.0 2714.0 0.449 
+# 2971.0 1948.0 0.473 
+# 2972.0 2578.0 0.474 
+# 2973.0 2002.0 0.47 
+# 2974.0 263.0 0.497 
+# 2975.0 570.0 0.463 
+# 2976.0 2171.0 0.458 
+# 2977.0 2839.0 0.46 
+# 2978.0 2878.0 0.449 
+# 2979.0 2920.0 0.454 
+# 2980.0 3214.0 0.463 
+# 2981.0 2927.0 0.501 
+# 2982.0 2618.0 0.463 
+# 2983.0 2180.0 0.367 
+# 2984.0 2882.0 0.508 
+# 2985.0 935.0 0.443 
+# 2986.0 589.0 0.447 
+# 2987.0 2547.0 0.44 
+# 2988.0 2670.0 0.442 
+# 2989.0 1895.0 0.467 
+# 2990.0 2427.0 0.487 
+# 2991.0 2946.0 0.442 
+# 2992.0 782.0 0.52 
+# 2993.0 2450.0 0.5 
+# 2994.0 2414.0 0.463 
+# 2995.0 927.0 0.536 
+# 2996.0 2906.0 0.428 
+# 2997.0 2812.0 0.465 
+# 2998.0 2544.0 0.391 
+# 2999.0 2240.0 0.455 
+# 3000.0 2940.0 0.477 
+# 3001.0 1707.0 0.471 
+# 3002.0 1476.0 0.459 
+# 3003.0 1918.0 0.468 
+# 3004.0 2461.0 0.423 
+# 3005.0 2568.0 0.469 
+# 3006.0 2011.0 0.458 
+# 3007.0 1909.0 0.464 
+# 3008.0 1034.0 0.383 
+# 3009.0 2518.0 0.467 
+# 3010.0 2716.0 0.458 
+# 3011.0 1667.0 0.453 
+# 3012.0 2977.0 0.472 
+# 3013.0 1418.0 0.47 
+# 3014.0 2841.0 0.45 
+# 3015.0 292.0 0.485 
+# 3016.0 2880.0 0.441 
+# 3017.0 1055.0 0.566 
+# 3018.0 2616.0 0.376 
+# 3019.0 2599.0 0.426 
+# 3020.0 1905.0 0.331 
+# 3021.0 2875.0 0.422 
+# 3022.0 2888.0 0.463 
+# 3023.0 2610.0 0.511 
+# 3024.0 1614.0 0.47 
+# 3025.0 2075.0 0.464 
+# 3026.0 2397.0 0.454 
+# 3027.0 2067.0 0.462 
+# 3028.0 1598.0 0.478 
+# 3029.0 2798.0 0.414 
+# 3030.0 1527.0 0.449 
+# 3031.0 1495.0 0.465 
+# 3032.0 1662.0 0.455 
+# 3033.0 220.0 0.467 
+# 3034.0 2979.0 0.471 
+# 3035.0 2622.0 0.468 
+# 3036.0 2063.0 0.391 
+# 3037.0 2807.0 0.465 
+# 3038.0 1768.0 0.427 
+# 3039.0 2450.0 0.465 
+# 3040.0 937.0 0.52 
+# 3041.0 2270.0 0.456 
+# 3042.0 2774.0 0.467 
+# 3043.0 2033.0 0.434 
+# 3044.0 2392.0 0.462 
+# 3045.0 2708.0 0.468 
+# 3046.0 2650.0 0.423 
+# 3047.0 2186.0 0.472 
+# 3048.0 2213.0 0.477 
+# 3049.0 2867.0 0.442 
+# 3050.0 2263.0 0.407 
+# 3051.0 2805.0 0.436 
+# 3052.0 817.0 0.462 
+# 3053.0 632.0 0.439 
+# 3054.0 1020.0 0.465 
+# 3055.0 2946.0 0.466 
+# 3056.0 664.0 0.498 
+# 3057.0 2570.0 0.482 
+# 3058.0 2896.0 0.458 
+# 3059.0 597.0 0.535 
+# 3060.0 2858.0 0.477 
+# 3061.0 2991.0 0.494 
+# 3062.0 2755.0 0.455 
+# 3063.0 1897.0 0.418 
+# 3064.0 2856.0 0.476 
+# 3065.0 1302.0 0.481 
+# 3066.0 2907.0 0.485 
+# 3067.0 2993.0 0.479 
+# 3068.0 213.0 0.468 
+# 3069.0 1711.0 0.468 
+# 3070.0 2800.0 0.441 
+# 3071.0 1536.0 0.461 
+# 3072.0 2751.0 0.454 
+# 3073.0 854.0 0.369 
+# 3074.0 2882.0 0.469 
+# 3075.0 2575.0 0.455 
+# 3076.0 1944.0 0.445 
+# 3077.0 2508.0 0.473 
+# 3078.0 2891.0 0.452 
+# 3079.0 670.0 0.52 
+# 3080.0 1755.0 0.382 
+# 3081.0 2123.0 0.443 
+# 3082.0 1945.0 0.455 
+# 3083.0 2852.0 0.469 
+# 3084.0 1452.0 0.455 
+# 3085.0 2779.0 0.475 
+# 3086.0 2789.0 0.478 
+# 3087.0 1869.0 0.486 
+# 3088.0 2901.0 0.484 
+# 3089.0 2155.0 0.52 
+# 3090.0 2663.0 0.462 
+# 3091.0 568.0 0.5 
+# 3092.0 787.0 0.53 
+# 3093.0 2486.0 0.439 
+# 3094.0 1292.0 0.528 
+# 3095.0 2448.0 0.508 
+# 3096.0 1841.0 0.501 
+# 3097.0 824.0 0.517 
+# 3098.0 4104.0 0.477 
+# 3099.0 2168.0 0.466 
+# 3100.0 1569.0 0.546 
+# 3101.0 2561.0 0.495 
+# 3102.0 520.0 0.357 
+# 3103.0 2669.0 0.501 
+# 3104.0 2820.0 0.655 
+# 3105.0 1407.0 0.469 
+# 3106.0 447.0 0.479 
+# 3107.0 2203.0 0.442 
+# 3108.0 1037.0 0.489 
+# 3109.0 2269.0 0.41 
+# 3110.0 1075.0 0.462 
+# 3111.0 1235.0 0.442 
+# 3112.0 760.0 0.476 
+# 3113.0 226.0 0.489 
+# 3114.0 1276.0 0.387 
+# 3115.0 45.0 0.371 
+# 3204.0 388.0 0.464 
+# 3205.0 447.0 0.462 
+# 3212.0 1743.0 0.436 
+# 3711.0 450.0 0.491 
+# 3731.0 662.0 0.518 
+# 3732.0 452.0 0.483 
+# 7797.0 804.0 0.478 
+# 7876.0 1108.0 0.463 
+# 7904.0 488.0 0.479 
+# 7923.0 2479.0 0.54 
+
+CL_cluster_948	336	0.473
+CL_cluster_952	637	0.475
+CL_cluster_956	1234	0.476
+CL_cluster_1001	737	0.48
+CL_cluster_1175	654	0.49
+CL_cluster_1177	600	0.486
+CL_cluster_1178	999	0.443
+CL_cluster_1205	1004	0.449
+CL_cluster_1233	497	0.443
+CL_cluster_1818	464	0.471
+CL_cluster_1821	1172	0.472
+CL_cluster_1826	2202	0.464
+CL_cluster_1889	124	0.465
+CL_cluster_1894	1415	0.437
+CL_cluster_2922	429	0.468
+CL_cluster_2923	2146	0.482
+CL_cluster_2925	2868	0.463
+CL_cluster_2926	2037	0.463
+CL_cluster_2927	2539	0.467
+CL_cluster_2928	1412	0.481
+CL_cluster_2929	3436	0.469
+CL_cluster_2930	298	0.459
+CL_cluster_2931	2179	0.469
+CL_cluster_2932	3645	0.51
+CL_cluster_2933	2749	0.479
+CL_cluster_2934	2498	0.478
+CL_cluster_2935	2878	0.506
+CL_cluster_2936	2748	0.499
+CL_cluster_2937	2832	0.463
+CL_cluster_2938	2490	0.51
+CL_cluster_2939	372	0.434
+CL_cluster_2940	991	0.458
+CL_cluster_2941	2933	0.476
+CL_cluster_2942	2129	0.447
+CL_cluster_2943	2965	0.46
+CL_cluster_2944	2033	0.464
+CL_cluster_2945	2862	0.467
+CL_cluster_2946	1244	0.493
+CL_cluster_2947	2447	0.499
+CL_cluster_2948	2333	0.526
+CL_cluster_2949	2793	0.483
+CL_cluster_2950	2229	0.496
+CL_cluster_2951	258	0.416
+CL_cluster_2952	1872	0.374
+CL_cluster_2953	2995	0.478
+CL_cluster_2954	1278	0.473
+CL_cluster_2955	2266	0.474
+CL_cluster_2956	2460	0.493
+CL_cluster_2957	2226	0.479
+CL_cluster_2958	2990	0.474
+CL_cluster_2959	727	0.51
+CL_cluster_2960	2015	0.472
+CL_cluster_2961	2836	0.427
+CL_cluster_2962	2822	0.468
+CL_cluster_2963	780	0.505
+CL_cluster_2964	2730	0.476
+CL_cluster_2965	1152	0.474
+CL_cluster_2966	2451	0.491
+CL_cluster_2967	1146	0.486
+CL_cluster_2968	2740	0.491
+CL_cluster_2969	2506	0.503
+CL_cluster_2970	2714	0.449
+CL_cluster_2971	1948	0.473
+CL_cluster_2972	2578	0.474
+CL_cluster_2973	2002	0.47
+CL_cluster_2974	263	0.497
+CL_cluster_2975	570	0.463
+CL_cluster_2976	2171	0.458
+CL_cluster_2977	2839	0.46
+CL_cluster_2978	2878	0.449
+CL_cluster_2979	2920	0.454
+CL_cluster_2980	3214	0.463
+CL_cluster_2981	2927	0.501
+CL_cluster_2982	2618	0.463
+CL_cluster_2983	2180	0.367
+CL_cluster_2984	2882	0.508
+CL_cluster_2985	935	0.443
+CL_cluster_2986	589	0.447
+CL_cluster_2987	2547	0.44
+CL_cluster_2988	2670	0.442
+CL_cluster_2989	1895	0.467
+CL_cluster_2990	2427	0.487
+CL_cluster_2991	2946	0.442
+CL_cluster_2992	782	0.52
+CL_cluster_2993	2450	0.5
+CL_cluster_2994	2414	0.463
+CL_cluster_2995	927	0.536
+CL_cluster_2996	2906	0.428
+CL_cluster_2997	2812	0.465
+CL_cluster_2998	2544	0.391
+CL_cluster_2999	2240	0.455
+CL_cluster_3000	2940	0.477
+CL_cluster_3001	1707	0.471
+CL_cluster_3002	1476	0.459
+CL_cluster_3003	1918	0.468
+CL_cluster_3004	2461	0.423
+CL_cluster_3005	2568	0.469
+CL_cluster_3006	2011	0.458
+CL_cluster_3007	1909	0.464
+CL_cluster_3008	1034	0.383
+CL_cluster_3009	2518	0.467
+CL_cluster_3010	2716	0.458
+CL_cluster_3011	1667	0.453
+CL_cluster_3012	2977	0.472
+CL_cluster_3013	1418	0.47
+CL_cluster_3014	2841	0.45
+CL_cluster_3015	292	0.485
+CL_cluster_3016	2880	0.441
+CL_cluster_3017	1055	0.566
+CL_cluster_3018	2616	0.376
+CL_cluster_3019	2599	0.426
+CL_cluster_3020	1905	0.331
+CL_cluster_3021	2875	0.422
+CL_cluster_3022	2888	0.463
+CL_cluster_3023	2610	0.511
+CL_cluster_3024	1614	0.47
+CL_cluster_3025	2075	0.464
+CL_cluster_3026	2397	0.454
+CL_cluster_3027	2067	0.462
+CL_cluster_3028	1598	0.478
+CL_cluster_3029	2798	0.414
+CL_cluster_3030	1527	0.449
+CL_cluster_3031	1495	0.465
+CL_cluster_3032	1662	0.455
+CL_cluster_3033	220	0.467
+CL_cluster_3034	2979	0.471
+CL_cluster_3035	2622	0.468
+CL_cluster_3036	2063	0.391
+CL_cluster_3037	2807	0.465
+CL_cluster_3038	1768	0.427
+CL_cluster_3039	2450	0.465
+CL_cluster_3040	937	0.52
+CL_cluster_3041	2270	0.456
+CL_cluster_3042	2774	0.467
+CL_cluster_3043	2033	0.434
+CL_cluster_3044	2392	0.462
+CL_cluster_3045	2708	0.468
+CL_cluster_3046	2650	0.423
+CL_cluster_3047	2186	0.472
+CL_cluster_3048	2213	0.477
+CL_cluster_3049	2867	0.442
+CL_cluster_3050	2263	0.407
+CL_cluster_3051	2805	0.436
+CL_cluster_3052	817	0.462
+CL_cluster_3053	632	0.439
+CL_cluster_3054	1020	0.465
+CL_cluster_3055	2946	0.466
+CL_cluster_3056	664	0.498
+CL_cluster_3057	2570	0.482
+CL_cluster_3058	2896	0.458
+CL_cluster_3059	597	0.535
+CL_cluster_3060	2858	0.477
+CL_cluster_3061	2991	0.494
+CL_cluster_3062	2755	0.455
+CL_cluster_3063	1897	0.418
+CL_cluster_3064	2856	0.476
+CL_cluster_3065	1302	0.481
+CL_cluster_3066	2907	0.485
+CL_cluster_3067	2993	0.479
+CL_cluster_3068	213	0.468
+CL_cluster_3069	1711	0.468
+CL_cluster_3070	2800	0.441
+CL_cluster_3071	1536	0.461
+CL_cluster_3072	2751	0.454
+CL_cluster_3073	854	0.369
+CL_cluster_3074	2882	0.469
+CL_cluster_3075	2575	0.455
+CL_cluster_3076	1944	0.445
+CL_cluster_3077	2508	0.473
+CL_cluster_3078	2891	0.452
+CL_cluster_3079	670	0.52
+CL_cluster_3080	1755	0.382
+CL_cluster_3081	2123	0.443
+CL_cluster_3082	1945	0.455
+CL_cluster_3083	2852	0.469
+CL_cluster_3084	1452	0.455
+CL_cluster_3085	2779	0.475
+CL_cluster_3086	2789	0.478
+CL_cluster_3087	1869	0.486
+CL_cluster_3088	2901	0.484
+CL_cluster_3089	2155	0.52
+CL_cluster_3090	2663	0.462
+CL_cluster_3091	568	0.5
+CL_cluster_3092	787	0.53
+CL_cluster_3093	2486	0.439
+CL_cluster_3094	1292	0.528
+CL_cluster_3095	2448	0.508
+CL_cluster_3096	1841	0.501
+CL_cluster_3097	824	0.517
+CL_cluster_3098	4104	0.477
+CL_cluster_3099	2168	0.466
+CL_cluster_3100	1569	0.546
+CL_cluster_3101	2561	0.495
+CL_cluster_3102	520	0.357
+CL_cluster_3103	2669	0.501
+CL_cluster_3104	2820	0.655
+CL_cluster_3105	1407	0.469
+CL_cluster_3106	447	0.479
+CL_cluster_3107	2203	0.442
+CL_cluster_3108	1037	0.489
+CL_cluster_3109	2269	0.41
+CL_cluster_3110	1075	0.462
+CL_cluster_3111	1235	0.442
+CL_cluster_3112	760	0.476
+CL_cluster_3113	226	0.489
+CL_cluster_3114	1276	0.387
+CL_cluster_3115	45	0.371
+CL_cluster_3204	388	0.464
+CL_cluster_3205	447	0.462
+CL_cluster_3212	1743	0.436
+CL_cluster_3711	450	0.491
+CL_cluster_3731	662	0.518
+CL_cluster_3732	452	0.483
+CL_cluster_7797	804	0.478
+CL_cluster_7876	1108	0.463
+CL_cluster_7904	488	0.479
+CL_cluster_7923	2479	0.54
+
+;
+
+# # Variable cost of PHC j / patient
+param:	        ITEM1   SIZE	FC1		VC1:=
+# 3118602190990 1 1 8 . 
+# 3118602191229 2 1 8 . 
+# 3118602190591 3 1 8 . 
+# 3118602190567 4 1 8 . 
+# 3118602190532 5 1 8 . 
+# 3118602190494 6 1 8 . 
+# 3118602190869 7 1 8 . 
+# 3118602190605 8 1 8 . 
+# 3118602190109 9 1 8 . 
+# 3118607116306 10 1 8 . 
+# 3118602190931 11 1 8 . 
+# 3118602190923 12 1 8 . 
+# 3118602190893 13 1 8 . 
+# 3118602190486 14 1 8 . 
+# 3118602190915 15 1 8 . 
+# 3118602190222 16 1 8 . 
+# 3118604696077 17 1 8 . 
+# 3118602191024 18 1 8 . 
+# 3118602190478 19 1 8 . 
+# 3118602190389 20 1 8 . 
+# 3118607110316 21 1 8 . 
+# 3118602220261 22 1 8 . 
+# 3118602190397 23 1 8 . 
+# 3118602190176 24 1 8 . 
+# 3118602191059 25 1 8 . 
+# 3118602191040 26 1 8 . 
+# 3118602190451 27 1 8 . 
+# 3118602190206 28 1 8 . 
+# 3118602190966 29 1 8 . 
+# 3118602190400 30 1 8 . 
+# 3118602190877 31 1 8 . 
+# 3118602190826 32 1 8 . 
+# 3118602190729 33 1 8 . 
+# 3118602190656 34 1 8 . 
+# 3118602190834 35 1 8 . 
+# 3118602190710 36 1 8 . 
+# 3118602190796 37 1 8 . 
+# 3118602190648 38 1 8 . 
+# 3118602190818 39 1 8 . 
+# 3118602190885 40 1 8 . 
+# 3118607053355 41 1 8 . 
+3118602190990	1	4	8	.
+3118602191229	2	4	8	.
+3118602190591	3	4	8	.
+3118602190567	4	1	8	.
+3118602190532	5	4	8	.
+3118602190494	6	2	8	.
+3118602190869	7	2	8	.
+3118602190605	8	1	8	.
+3118602190109	9	1	8	.
+3118607116306	10	2	8	.
+3118602190931	11	4	8	.
+3118602190923	12	4	8	.
+3118602190893	13	4	8	.
+3118602190486	14	4	8	.
+3118602190915	15	2	8	.
+3118602190222	16	4	8	.
+3118604696077	17	4	8	.
+3118602191024	18	1	8	.
+3118602190478	19	1	8	.
+3118602190389	20	2	8	.
+3118607110316	21	4	8	.
+3118602220261	22	1	8	.
+3118602190397	23	1	8	.
+3118602190176	24	1	8	.
+3118602191059	25	4	8	.
+3118602191040	26	1	8	.
+3118602190451	27	3	8	.
+3118602190206	28	4	8	.
+3118602190966	29	1	8	.
+3118602190400	30	1	8	.
+3118602190877	31	3	8	.
+3118602190826	32	4	8	.
+3118602190729	33	2	8	.
+3118602190656	34	4	8	.
+3118602190834	35	1	8	.
+3118602190710	36	1	8	.
+3118602190796	37	1	8	.
+3118602190648	38	1	8	.
+3118602190818	39	3	8	.
+3118602190885	40	4	8	.
+3118607053355	41	1	8	.
+CL_cluster_948 42 . . . 
+CL_cluster_952 43 . . . 
+CL_cluster_956 44 . . . 
+CL_cluster_1001 45 . . . 
+CL_cluster_1175 46 . . . 
+CL_cluster_1177 47 . . . 
+CL_cluster_1178 48 . . . 
+CL_cluster_1205 49 . . . 
+CL_cluster_1233 50 . . . 
+CL_cluster_1818 51 . . . 
+CL_cluster_1821 52 . . . 
+CL_cluster_1826 53 . . . 
+CL_cluster_1889 54 . . . 
+CL_cluster_1894 55 . . . 
+CL_cluster_2922 56 . . . 
+CL_cluster_2923 57 . . . 
+CL_cluster_2925 58 . . . 
+CL_cluster_2926 59 . . . 
+CL_cluster_2927 60 . . . 
+CL_cluster_2928 61 . . . 
+CL_cluster_2929 62 . . . 
+CL_cluster_2930 63 . . . 
+CL_cluster_2931 64 . . . 
+CL_cluster_2932 65 . . . 
+CL_cluster_2933 66 . . . 
+CL_cluster_2934 67 . . . 
+CL_cluster_2935 68 . . . 
+CL_cluster_2936 69 . . . 
+CL_cluster_2937 70 . . . 
+CL_cluster_2938 71 . . . 
+CL_cluster_2939 72 . . . 
+CL_cluster_2940 73 . . . 
+CL_cluster_2941 74 . . . 
+CL_cluster_2942 75 . . . 
+CL_cluster_2943 76 . . . 
+CL_cluster_2944 77 . . . 
+CL_cluster_2945 78 . . . 
+CL_cluster_2946 79 . . . 
+CL_cluster_2947 80 . . . 
+CL_cluster_2948 81 . . . 
+CL_cluster_2949 82 . . . 
+CL_cluster_2950 83 . . . 
+CL_cluster_2951 84 . . . 
+CL_cluster_2952 85 . . . 
+CL_cluster_2953 86 . . . 
+CL_cluster_2954 87 . . . 
+CL_cluster_2955 88 . . . 
+CL_cluster_2956 89 . . . 
+CL_cluster_2957 90 . . . 
+CL_cluster_2958 91 . . . 
+CL_cluster_2959 92 . . . 
+CL_cluster_2960 93 . . . 
+CL_cluster_2961 94 . . . 
+CL_cluster_2962 95 . . . 
+CL_cluster_2963 96 . . . 
+CL_cluster_2964 97 . . . 
+CL_cluster_2965 98 . . . 
+CL_cluster_2966 99 . . . 
+CL_cluster_2967 100 . . . 
+CL_cluster_2968 101 . . . 
+CL_cluster_2969 102 . . . 
+CL_cluster_2970 103 . . . 
+CL_cluster_2971 104 . . . 
+CL_cluster_2972 105 . . . 
+CL_cluster_2973 106 . . . 
+CL_cluster_2974 107 . . . 
+CL_cluster_2975 108 . . . 
+CL_cluster_2976 109 . . . 
+CL_cluster_2977 110 . . . 
+CL_cluster_2978 111 . . . 
+CL_cluster_2979 112 . . . 
+CL_cluster_2980 113 . . . 
+CL_cluster_2981 114 . . . 
+CL_cluster_2982 115 . . . 
+CL_cluster_2983 116 . . . 
+CL_cluster_2984 117 . . . 
+CL_cluster_2985 118 . . . 
+CL_cluster_2986 119 . . . 
+CL_cluster_2987 120 . . . 
+CL_cluster_2988 121 . . . 
+CL_cluster_2989 122 . . . 
+CL_cluster_2990 123 . . . 
+CL_cluster_2991 124 . . . 
+CL_cluster_2992 125 . . . 
+CL_cluster_2993 126 . . . 
+CL_cluster_2994 127 . . . 
+CL_cluster_2995 128 . . . 
+CL_cluster_2996 129 . . . 
+CL_cluster_2997 130 . . . 
+CL_cluster_2998 131 . . . 
+CL_cluster_2999 132 . . . 
+CL_cluster_3000 133 . . . 
+CL_cluster_3001 134 . . . 
+CL_cluster_3002 135 . . . 
+CL_cluster_3003 136 . . . 
+CL_cluster_3004 137 . . . 
+CL_cluster_3005 138 . . . 
+CL_cluster_3006 139 . . . 
+CL_cluster_3007 140 . . . 
+CL_cluster_3008 141 . . . 
+CL_cluster_3009 142 . . . 
+CL_cluster_3010 143 . . . 
+CL_cluster_3011 144 . . . 
+CL_cluster_3012 145 . . . 
+CL_cluster_3013 146 . . . 
+CL_cluster_3014 147 . . . 
+CL_cluster_3015 148 . . . 
+CL_cluster_3016 149 . . . 
+CL_cluster_3017 150 . . . 
+CL_cluster_3018 151 . . . 
+CL_cluster_3019 152 . . . 
+CL_cluster_3020 153 . . . 
+CL_cluster_3021 154 . . . 
+CL_cluster_3022 155 . . . 
+CL_cluster_3023 156 . . . 
+CL_cluster_3024 157 . . . 
+CL_cluster_3025 158 . . . 
+CL_cluster_3026 159 . . . 
+CL_cluster_3027 160 . . . 
+CL_cluster_3028 161 . . . 
+CL_cluster_3029 162 . . . 
+CL_cluster_3030 163 . . . 
+CL_cluster_3031 164 . . . 
+CL_cluster_3032 165 . . . 
+CL_cluster_3033 166 . . . 
+CL_cluster_3034 167 . . . 
+CL_cluster_3035 168 . . . 
+CL_cluster_3036 169 . . . 
+CL_cluster_3037 170 . . . 
+CL_cluster_3038 171 . . . 
+CL_cluster_3039 172 . . . 
+CL_cluster_3040 173 . . . 
+CL_cluster_3041 174 . . . 
+CL_cluster_3042 175 . . . 
+CL_cluster_3043 176 . . . 
+CL_cluster_3044 177 . . . 
+CL_cluster_3045 178 . . . 
+CL_cluster_3046 179 . . . 
+CL_cluster_3047 180 . . . 
+CL_cluster_3048 181 . . . 
+CL_cluster_3049 182 . . . 
+CL_cluster_3050 183 . . . 
+CL_cluster_3051 184 . . . 
+CL_cluster_3052 185 . . . 
+CL_cluster_3053 186 . . . 
+CL_cluster_3054 187 . . . 
+CL_cluster_3055 188 . . . 
+CL_cluster_3056 189 . . . 
+CL_cluster_3057 190 . . . 
+CL_cluster_3058 191 . . . 
+CL_cluster_3059 192 . . . 
+CL_cluster_3060 193 . . . 
+CL_cluster_3061 194 . . . 
+CL_cluster_3062 195 . . . 
+CL_cluster_3063 196 . . . 
+CL_cluster_3064 197 . . . 
+CL_cluster_3065 198 . . . 
+CL_cluster_3066 199 . . . 
+CL_cluster_3067 200 . . . 
+CL_cluster_3068 201 . . . 
+CL_cluster_3069 202 . . . 
+CL_cluster_3070 203 . . . 
+CL_cluster_3071 204 . . . 
+CL_cluster_3072 205 . . . 
+CL_cluster_3073 206 . . . 
+CL_cluster_3074 207 . . . 
+CL_cluster_3075 208 . . . 
+CL_cluster_3076 209 . . . 
+CL_cluster_3077 210 . . . 
+CL_cluster_3078 211 . . . 
+CL_cluster_3079 212 . . . 
+CL_cluster_3080 213 . . . 
+CL_cluster_3081 214 . . . 
+CL_cluster_3082 215 . . . 
+CL_cluster_3083 216 . . . 
+CL_cluster_3084 217 . . . 
+CL_cluster_3085 218 . . . 
+CL_cluster_3086 219 . . . 
+CL_cluster_3087 220 . . . 
+CL_cluster_3088 221 . . . 
+CL_cluster_3089 222 . . . 
+CL_cluster_3090 223 . . . 
+CL_cluster_3091 224 . . . 
+CL_cluster_3092 225 . . . 
+CL_cluster_3093 226 . . . 
+CL_cluster_3094 227 . . . 
+CL_cluster_3095 228 . . . 
+CL_cluster_3096 229 . . . 
+CL_cluster_3097 230 . . . 
+CL_cluster_3098 231 . . . 
+CL_cluster_3099 232 . . . 
+CL_cluster_3100 233 . . . 
+CL_cluster_3101 234 . . . 
+CL_cluster_3102 235 . . . 
+CL_cluster_3103 236 . . . 
+CL_cluster_3104 237 . . . 
+CL_cluster_3105 238 . . . 
+CL_cluster_3106 239 . . . 
+CL_cluster_3107 240 . . . 
+CL_cluster_3108 241 . . . 
+CL_cluster_3109 242 . . . 
+CL_cluster_3110 243 . . . 
+CL_cluster_3111 244 . . . 
+CL_cluster_3112 245 . . . 
+CL_cluster_3113 246 . . . 
+CL_cluster_3114 247 . . . 
+CL_cluster_3115 248 . . . 
+CL_cluster_3204 249 . . . 
+CL_cluster_3205 250 . . . 
+CL_cluster_3212 251 . . . 
+CL_cluster_3711 252 . . . 
+CL_cluster_3731 253 . . . 
+CL_cluster_3732 254 . . . 
+CL_cluster_7797 255 . . . 
+CL_cluster_7876 256 . . . 
+CL_cluster_7904 257 . . . 
+CL_cluster_7923 258 . . . 
+;
+
+param:	ITEM2   FC2		VC2:=
+SHC1	1       200000		10
+;
+
+param:	ITEM3   FC3		VC3:=
+THC1	1       300000		20
+;
+
+# Team cost K1 ($/year)
+# 		Folha mensal	Encargos	Insumos	Transporte	Supervisão
+# eSF	 R$ 1.455.500.00 	50000	45000	7500	3500	5000
+# eSB	 R$ 640.420.00 	22000	19800	3300	1540	2200
+# eMulti (1/9)	 R$ 611.595.56 	92000	82800	13800	6440	9200
+# Fonte: Planilha APS_dados.xlsx
+param CE1:=
+eSF 288000 
+eSB 105248 
+eMulti 322625 
+ACS 36280 
+;
+
+# Team cost K2 ($/year)
+param CE2:=
+EQ2 0 
+;
+
+# Team cost K3 ($/year)
+param CE3:=
+EQ3 0 
+;
+
+param D0_2:=
+# 948.0 SHC1 20000 
+# 952.0 SHC1 20000 
+# 956.0 SHC1 20000 
+# 1001.0 SHC1 20000 
+# 1175.0 SHC1 20000 
+# 1177.0 SHC1 20000 
+# 1178.0 SHC1 20000 
+# 1205.0 SHC1 20000 
+# 1233.0 SHC1 20000 
+# 1818.0 SHC1 20000 
+# 1821.0 SHC1 20000 
+# 1826.0 SHC1 20000 
+# 1889.0 SHC1 20000 
+# 1894.0 SHC1 20000 
+# 2922.0 SHC1 20000 
+# 2923.0 SHC1 20000 
+# 2925.0 SHC1 20000 
+# 2926.0 SHC1 20000 
+# 2927.0 SHC1 20000 
+# 2928.0 SHC1 20000 
+# 2929.0 SHC1 20000 
+# 2930.0 SHC1 20000 
+# 2931.0 SHC1 20000 
+# 2932.0 SHC1 20000 
+# 2933.0 SHC1 20000 
+# 2934.0 SHC1 20000 
+# 2935.0 SHC1 20000 
+# 2936.0 SHC1 20000 
+# 2937.0 SHC1 20000 
+# 2938.0 SHC1 20000 
+# 2939.0 SHC1 20000 
+# 2940.0 SHC1 20000 
+# 2941.0 SHC1 20000 
+# 2942.0 SHC1 20000 
+# 2943.0 SHC1 20000 
+# 2944.0 SHC1 20000 
+# 2945.0 SHC1 20000 
+# 2946.0 SHC1 20000 
+# 2947.0 SHC1 20000 
+# 2948.0 SHC1 20000 
+# 2949.0 SHC1 20000 
+# 2950.0 SHC1 20000 
+# 2951.0 SHC1 20000 
+# 2952.0 SHC1 20000 
+# 2953.0 SHC1 20000 
+# 2954.0 SHC1 20000 
+# 2955.0 SHC1 20000 
+# 2956.0 SHC1 20000 
+# 2957.0 SHC1 20000 
+# 2958.0 SHC1 20000 
+# 2959.0 SHC1 20000 
+# 2960.0 SHC1 20000 
+# 2961.0 SHC1 20000 
+# 2962.0 SHC1 20000 
+# 2963.0 SHC1 20000 
+# 2964.0 SHC1 20000 
+# 2965.0 SHC1 20000 
+# 2966.0 SHC1 20000 
+# 2967.0 SHC1 20000 
+# 2968.0 SHC1 20000 
+# 2969.0 SHC1 20000 
+# 2970.0 SHC1 20000 
+# 2971.0 SHC1 20000 
+# 2972.0 SHC1 20000 
+# 2973.0 SHC1 20000 
+# 2974.0 SHC1 20000 
+# 2975.0 SHC1 20000 
+# 2976.0 SHC1 20000 
+# 2977.0 SHC1 20000 
+# 2978.0 SHC1 20000 
+# 2979.0 SHC1 20000 
+# 2980.0 SHC1 20000 
+# 2981.0 SHC1 20000 
+# 2982.0 SHC1 20000 
+# 2983.0 SHC1 20000 
+# 2984.0 SHC1 20000 
+# 2985.0 SHC1 20000 
+# 2986.0 SHC1 20000 
+# 2987.0 SHC1 20000 
+# 2988.0 SHC1 20000 
+# 2989.0 SHC1 20000 
+# 2990.0 SHC1 20000 
+# 2991.0 SHC1 20000 
+# 2992.0 SHC1 20000 
+# 2993.0 SHC1 20000 
+# 2994.0 SHC1 20000 
+# 2995.0 SHC1 20000 
+# 2996.0 SHC1 20000 
+# 2997.0 SHC1 20000 
+# 2998.0 SHC1 20000 
+# 2999.0 SHC1 20000 
+# 3000.0 SHC1 20000 
+# 3001.0 SHC1 20000 
+# 3002.0 SHC1 20000 
+# 3003.0 SHC1 20000 
+# 3004.0 SHC1 20000 
+# 3005.0 SHC1 20000 
+# 3006.0 SHC1 20000 
+# 3007.0 SHC1 20000 
+# 3008.0 SHC1 20000 
+# 3009.0 SHC1 20000 
+# 3010.0 SHC1 20000 
+# 3011.0 SHC1 20000 
+# 3012.0 SHC1 20000 
+# 3013.0 SHC1 20000 
+# 3014.0 SHC1 20000 
+# 3015.0 SHC1 20000 
+# 3016.0 SHC1 20000 
+# 3017.0 SHC1 20000 
+# 3018.0 SHC1 20000 
+# 3019.0 SHC1 20000 
+# 3020.0 SHC1 20000 
+# 3021.0 SHC1 20000 
+# 3022.0 SHC1 20000 
+# 3023.0 SHC1 20000 
+# 3024.0 SHC1 20000 
+# 3025.0 SHC1 20000 
+# 3026.0 SHC1 20000 
+# 3027.0 SHC1 20000 
+# 3028.0 SHC1 20000 
+# 3029.0 SHC1 20000 
+# 3030.0 SHC1 20000 
+# 3031.0 SHC1 20000 
+# 3032.0 SHC1 20000 
+# 3033.0 SHC1 20000 
+# 3034.0 SHC1 20000 
+# 3035.0 SHC1 20000 
+# 3036.0 SHC1 20000 
+# 3037.0 SHC1 20000 
+# 3038.0 SHC1 20000 
+# 3039.0 SHC1 20000 
+# 3040.0 SHC1 20000 
+# 3041.0 SHC1 20000 
+# 3042.0 SHC1 20000 
+# 3043.0 SHC1 20000 
+# 3044.0 SHC1 20000 
+# 3045.0 SHC1 20000 
+# 3046.0 SHC1 20000 
+# 3047.0 SHC1 20000 
+# 3048.0 SHC1 20000 
+# 3049.0 SHC1 20000 
+# 3050.0 SHC1 20000 
+# 3051.0 SHC1 20000 
+# 3052.0 SHC1 20000 
+# 3053.0 SHC1 20000 
+# 3054.0 SHC1 20000 
+# 3055.0 SHC1 20000 
+# 3056.0 SHC1 20000 
+# 3057.0 SHC1 20000 
+# 3058.0 SHC1 20000 
+# 3059.0 SHC1 20000 
+# 3060.0 SHC1 20000 
+# 3061.0 SHC1 20000 
+# 3062.0 SHC1 20000 
+# 3063.0 SHC1 20000 
+# 3064.0 SHC1 20000 
+# 3065.0 SHC1 20000 
+# 3066.0 SHC1 20000 
+# 3067.0 SHC1 20000 
+# 3068.0 SHC1 20000 
+# 3069.0 SHC1 20000 
+# 3070.0 SHC1 20000 
+# 3071.0 SHC1 20000 
+# 3072.0 SHC1 20000 
+# 3073.0 SHC1 20000 
+# 3074.0 SHC1 20000 
+# 3075.0 SHC1 20000 
+# 3076.0 SHC1 20000 
+# 3077.0 SHC1 20000 
+# 3078.0 SHC1 20000 
+# 3079.0 SHC1 20000 
+# 3080.0 SHC1 20000 
+# 3081.0 SHC1 20000 
+# 3082.0 SHC1 20000 
+# 3083.0 SHC1 20000 
+# 3084.0 SHC1 20000 
+# 3085.0 SHC1 20000 
+# 3086.0 SHC1 20000 
+# 3087.0 SHC1 20000 
+# 3088.0 SHC1 20000 
+# 3089.0 SHC1 20000 
+# 3090.0 SHC1 20000 
+# 3091.0 SHC1 20000 
+# 3092.0 SHC1 20000 
+# 3093.0 SHC1 20000 
+# 3094.0 SHC1 20000 
+# 3095.0 SHC1 20000 
+# 3096.0 SHC1 20000 
+# 3097.0 SHC1 20000 
+# 3098.0 SHC1 20000 
+# 3099.0 SHC1 20000 
+# 3100.0 SHC1 20000 
+# 3101.0 SHC1 20000 
+# 3102.0 SHC1 20000 
+# 3103.0 SHC1 20000 
+# 3104.0 SHC1 20000 
+# 3105.0 SHC1 20000 
+# 3106.0 SHC1 20000 
+# 3107.0 SHC1 20000 
+# 3108.0 SHC1 20000 
+# 3109.0 SHC1 20000 
+# 3110.0 SHC1 20000 
+# 3111.0 SHC1 20000 
+# 3112.0 SHC1 20000 
+# 3113.0 SHC1 20000 
+# 3114.0 SHC1 20000 
+# 3115.0 SHC1 20000 
+# 3204.0 SHC1 20000 
+# 3205.0 SHC1 20000 
+# 3212.0 SHC1 20000 
+# 3711.0 SHC1 20000 
+# 3731.0 SHC1 20000 
+# 3732.0 SHC1 20000 
+# 7797.0 SHC1 20000 
+# 7876.0 SHC1 20000 
+# 7904.0 SHC1 20000 
+# 7923.0 SHC1 20000 
+
+CL_cluster_948	SHC1	20000
+CL_cluster_952	SHC1	20000
+CL_cluster_956	SHC1	20000
+CL_cluster_1001	SHC1	20000
+CL_cluster_1175	SHC1	20000
+CL_cluster_1177	SHC1	20000
+CL_cluster_1178	SHC1	20000
+CL_cluster_1205	SHC1	20000
+CL_cluster_1233	SHC1	20000
+CL_cluster_1818	SHC1	20000
+CL_cluster_1821	SHC1	20000
+CL_cluster_1826	SHC1	20000
+CL_cluster_1889	SHC1	20000
+CL_cluster_1894	SHC1	20000
+CL_cluster_2922	SHC1	20000
+CL_cluster_2923	SHC1	20000
+CL_cluster_2925	SHC1	20000
+CL_cluster_2926	SHC1	20000
+CL_cluster_2927	SHC1	20000
+CL_cluster_2928	SHC1	20000
+CL_cluster_2929	SHC1	20000
+CL_cluster_2930	SHC1	20000
+CL_cluster_2931	SHC1	20000
+CL_cluster_2932	SHC1	20000
+CL_cluster_2933	SHC1	20000
+CL_cluster_2934	SHC1	20000
+CL_cluster_2935	SHC1	20000
+CL_cluster_2936	SHC1	20000
+CL_cluster_2937	SHC1	20000
+CL_cluster_2938	SHC1	20000
+CL_cluster_2939	SHC1	20000
+CL_cluster_2940	SHC1	20000
+CL_cluster_2941	SHC1	20000
+CL_cluster_2942	SHC1	20000
+CL_cluster_2943	SHC1	20000
+CL_cluster_2944	SHC1	20000
+CL_cluster_2945	SHC1	20000
+CL_cluster_2946	SHC1	20000
+CL_cluster_2947	SHC1	20000
+CL_cluster_2948	SHC1	20000
+CL_cluster_2949	SHC1	20000
+CL_cluster_2950	SHC1	20000
+CL_cluster_2951	SHC1	20000
+CL_cluster_2952	SHC1	20000
+CL_cluster_2953	SHC1	20000
+CL_cluster_2954	SHC1	20000
+CL_cluster_2955	SHC1	20000
+CL_cluster_2956	SHC1	20000
+CL_cluster_2957	SHC1	20000
+CL_cluster_2958	SHC1	20000
+CL_cluster_2959	SHC1	20000
+CL_cluster_2960	SHC1	20000
+CL_cluster_2961	SHC1	20000
+CL_cluster_2962	SHC1	20000
+CL_cluster_2963	SHC1	20000
+CL_cluster_2964	SHC1	20000
+CL_cluster_2965	SHC1	20000
+CL_cluster_2966	SHC1	20000
+CL_cluster_2967	SHC1	20000
+CL_cluster_2968	SHC1	20000
+CL_cluster_2969	SHC1	20000
+CL_cluster_2970	SHC1	20000
+CL_cluster_2971	SHC1	20000
+CL_cluster_2972	SHC1	20000
+CL_cluster_2973	SHC1	20000
+CL_cluster_2974	SHC1	20000
+CL_cluster_2975	SHC1	20000
+CL_cluster_2976	SHC1	20000
+CL_cluster_2977	SHC1	20000
+CL_cluster_2978	SHC1	20000
+CL_cluster_2979	SHC1	20000
+CL_cluster_2980	SHC1	20000
+CL_cluster_2981	SHC1	20000
+CL_cluster_2982	SHC1	20000
+CL_cluster_2983	SHC1	20000
+CL_cluster_2984	SHC1	20000
+CL_cluster_2985	SHC1	20000
+CL_cluster_2986	SHC1	20000
+CL_cluster_2987	SHC1	20000
+CL_cluster_2988	SHC1	20000
+CL_cluster_2989	SHC1	20000
+CL_cluster_2990	SHC1	20000
+CL_cluster_2991	SHC1	20000
+CL_cluster_2992	SHC1	20000
+CL_cluster_2993	SHC1	20000
+CL_cluster_2994	SHC1	20000
+CL_cluster_2995	SHC1	20000
+CL_cluster_2996	SHC1	20000
+CL_cluster_2997	SHC1	20000
+CL_cluster_2998	SHC1	20000
+CL_cluster_2999	SHC1	20000
+CL_cluster_3000	SHC1	20000
+CL_cluster_3001	SHC1	20000
+CL_cluster_3002	SHC1	20000
+CL_cluster_3003	SHC1	20000
+CL_cluster_3004	SHC1	20000
+CL_cluster_3005	SHC1	20000
+CL_cluster_3006	SHC1	20000
+CL_cluster_3007	SHC1	20000
+CL_cluster_3008	SHC1	20000
+CL_cluster_3009	SHC1	20000
+CL_cluster_3010	SHC1	20000
+CL_cluster_3011	SHC1	20000
+CL_cluster_3012	SHC1	20000
+CL_cluster_3013	SHC1	20000
+CL_cluster_3014	SHC1	20000
+CL_cluster_3015	SHC1	20000
+CL_cluster_3016	SHC1	20000
+CL_cluster_3017	SHC1	20000
+CL_cluster_3018	SHC1	20000
+CL_cluster_3019	SHC1	20000
+CL_cluster_3020	SHC1	20000
+CL_cluster_3021	SHC1	20000
+CL_cluster_3022	SHC1	20000
+CL_cluster_3023	SHC1	20000
+CL_cluster_3024	SHC1	20000
+CL_cluster_3025	SHC1	20000
+CL_cluster_3026	SHC1	20000
+CL_cluster_3027	SHC1	20000
+CL_cluster_3028	SHC1	20000
+CL_cluster_3029	SHC1	20000
+CL_cluster_3030	SHC1	20000
+CL_cluster_3031	SHC1	20000
+CL_cluster_3032	SHC1	20000
+CL_cluster_3033	SHC1	20000
+CL_cluster_3034	SHC1	20000
+CL_cluster_3035	SHC1	20000
+CL_cluster_3036	SHC1	20000
+CL_cluster_3037	SHC1	20000
+CL_cluster_3038	SHC1	20000
+CL_cluster_3039	SHC1	20000
+CL_cluster_3040	SHC1	20000
+CL_cluster_3041	SHC1	20000
+CL_cluster_3042	SHC1	20000
+CL_cluster_3043	SHC1	20000
+CL_cluster_3044	SHC1	20000
+CL_cluster_3045	SHC1	20000
+CL_cluster_3046	SHC1	20000
+CL_cluster_3047	SHC1	20000
+CL_cluster_3048	SHC1	20000
+CL_cluster_3049	SHC1	20000
+CL_cluster_3050	SHC1	20000
+CL_cluster_3051	SHC1	20000
+CL_cluster_3052	SHC1	20000
+CL_cluster_3053	SHC1	20000
+CL_cluster_3054	SHC1	20000
+CL_cluster_3055	SHC1	20000
+CL_cluster_3056	SHC1	20000
+CL_cluster_3057	SHC1	20000
+CL_cluster_3058	SHC1	20000
+CL_cluster_3059	SHC1	20000
+CL_cluster_3060	SHC1	20000
+CL_cluster_3061	SHC1	20000
+CL_cluster_3062	SHC1	20000
+CL_cluster_3063	SHC1	20000
+CL_cluster_3064	SHC1	20000
+CL_cluster_3065	SHC1	20000
+CL_cluster_3066	SHC1	20000
+CL_cluster_3067	SHC1	20000
+CL_cluster_3068	SHC1	20000
+CL_cluster_3069	SHC1	20000
+CL_cluster_3070	SHC1	20000
+CL_cluster_3071	SHC1	20000
+CL_cluster_3072	SHC1	20000
+CL_cluster_3073	SHC1	20000
+CL_cluster_3074	SHC1	20000
+CL_cluster_3075	SHC1	20000
+CL_cluster_3076	SHC1	20000
+CL_cluster_3077	SHC1	20000
+CL_cluster_3078	SHC1	20000
+CL_cluster_3079	SHC1	20000
+CL_cluster_3080	SHC1	20000
+CL_cluster_3081	SHC1	20000
+CL_cluster_3082	SHC1	20000
+CL_cluster_3083	SHC1	20000
+CL_cluster_3084	SHC1	20000
+CL_cluster_3085	SHC1	20000
+CL_cluster_3086	SHC1	20000
+CL_cluster_3087	SHC1	20000
+CL_cluster_3088	SHC1	20000
+CL_cluster_3089	SHC1	20000
+CL_cluster_3090	SHC1	20000
+CL_cluster_3091	SHC1	20000
+CL_cluster_3092	SHC1	20000
+CL_cluster_3093	SHC1	20000
+CL_cluster_3094	SHC1	20000
+CL_cluster_3095	SHC1	20000
+CL_cluster_3096	SHC1	20000
+CL_cluster_3097	SHC1	20000
+CL_cluster_3098	SHC1	20000
+CL_cluster_3099	SHC1	20000
+CL_cluster_3100	SHC1	20000
+CL_cluster_3101	SHC1	20000
+CL_cluster_3102	SHC1	20000
+CL_cluster_3103	SHC1	20000
+CL_cluster_3104	SHC1	20000
+CL_cluster_3105	SHC1	20000
+CL_cluster_3106	SHC1	20000
+CL_cluster_3107	SHC1	20000
+CL_cluster_3108	SHC1	20000
+CL_cluster_3109	SHC1	20000
+CL_cluster_3110	SHC1	20000
+CL_cluster_3111	SHC1	20000
+CL_cluster_3112	SHC1	20000
+CL_cluster_3113	SHC1	20000
+CL_cluster_3114	SHC1	20000
+CL_cluster_3115	SHC1	20000
+CL_cluster_3204	SHC1	20000
+CL_cluster_3205	SHC1	20000
+CL_cluster_3212	SHC1	20000
+CL_cluster_3711	SHC1	20000
+CL_cluster_3731	SHC1	20000
+CL_cluster_3732	SHC1	20000
+CL_cluster_7797	SHC1	20000
+CL_cluster_7876	SHC1	20000
+CL_cluster_7904	SHC1	20000
+CL_cluster_7923	SHC1	20000
+
+;
+
+param D0_3:=
+# 948.0 THC1 25000 
+# 952.0 THC1 25000 
+# 956.0 THC1 25000 
+# 1001.0 THC1 25000 
+# 1175.0 THC1 25000 
+# 1177.0 THC1 25000 
+# 1178.0 THC1 25000 
+# 1205.0 THC1 25000 
+# 1233.0 THC1 25000 
+# 1818.0 THC1 25000 
+# 1821.0 THC1 25000 
+# 1826.0 THC1 25000 
+# 1889.0 THC1 25000 
+# 1894.0 THC1 25000 
+# 2922.0 THC1 25000 
+# 2923.0 THC1 25000 
+# 2925.0 THC1 25000 
+# 2926.0 THC1 25000 
+# 2927.0 THC1 25000 
+# 2928.0 THC1 25000 
+# 2929.0 THC1 25000 
+# 2930.0 THC1 25000 
+# 2931.0 THC1 25000 
+# 2932.0 THC1 25000 
+# 2933.0 THC1 25000 
+# 2934.0 THC1 25000 
+# 2935.0 THC1 25000 
+# 2936.0 THC1 25000 
+# 2937.0 THC1 25000 
+# 2938.0 THC1 25000 
+# 2939.0 THC1 25000 
+# 2940.0 THC1 25000 
+# 2941.0 THC1 25000 
+# 2942.0 THC1 25000 
+# 2943.0 THC1 25000 
+# 2944.0 THC1 25000 
+# 2945.0 THC1 25000 
+# 2946.0 THC1 25000 
+# 2947.0 THC1 25000 
+# 2948.0 THC1 25000 
+# 2949.0 THC1 25000 
+# 2950.0 THC1 25000 
+# 2951.0 THC1 25000 
+# 2952.0 THC1 25000 
+# 2953.0 THC1 25000 
+# 2954.0 THC1 25000 
+# 2955.0 THC1 25000 
+# 2956.0 THC1 25000 
+# 2957.0 THC1 25000 
+# 2958.0 THC1 25000 
+# 2959.0 THC1 25000 
+# 2960.0 THC1 25000 
+# 2961.0 THC1 25000 
+# 2962.0 THC1 25000 
+# 2963.0 THC1 25000 
+# 2964.0 THC1 25000 
+# 2965.0 THC1 25000 
+# 2966.0 THC1 25000 
+# 2967.0 THC1 25000 
+# 2968.0 THC1 25000 
+# 2969.0 THC1 25000 
+# 2970.0 THC1 25000 
+# 2971.0 THC1 25000 
+# 2972.0 THC1 25000 
+# 2973.0 THC1 25000 
+# 2974.0 THC1 25000 
+# 2975.0 THC1 25000 
+# 2976.0 THC1 25000 
+# 2977.0 THC1 25000 
+# 2978.0 THC1 25000 
+# 2979.0 THC1 25000 
+# 2980.0 THC1 25000 
+# 2981.0 THC1 25000 
+# 2982.0 THC1 25000 
+# 2983.0 THC1 25000 
+# 2984.0 THC1 25000 
+# 2985.0 THC1 25000 
+# 2986.0 THC1 25000 
+# 2987.0 THC1 25000 
+# 2988.0 THC1 25000 
+# 2989.0 THC1 25000 
+# 2990.0 THC1 25000 
+# 2991.0 THC1 25000 
+# 2992.0 THC1 25000 
+# 2993.0 THC1 25000 
+# 2994.0 THC1 25000 
+# 2995.0 THC1 25000 
+# 2996.0 THC1 25000 
+# 2997.0 THC1 25000 
+# 2998.0 THC1 25000 
+# 2999.0 THC1 25000 
+# 3000.0 THC1 25000 
+# 3001.0 THC1 25000 
+# 3002.0 THC1 25000 
+# 3003.0 THC1 25000 
+# 3004.0 THC1 25000 
+# 3005.0 THC1 25000 
+# 3006.0 THC1 25000 
+# 3007.0 THC1 25000 
+# 3008.0 THC1 25000 
+# 3009.0 THC1 25000 
+# 3010.0 THC1 25000 
+# 3011.0 THC1 25000 
+# 3012.0 THC1 25000 
+# 3013.0 THC1 25000 
+# 3014.0 THC1 25000 
+# 3015.0 THC1 25000 
+# 3016.0 THC1 25000 
+# 3017.0 THC1 25000 
+# 3018.0 THC1 25000 
+# 3019.0 THC1 25000 
+# 3020.0 THC1 25000 
+# 3021.0 THC1 25000 
+# 3022.0 THC1 25000 
+# 3023.0 THC1 25000 
+# 3024.0 THC1 25000 
+# 3025.0 THC1 25000 
+# 3026.0 THC1 25000 
+# 3027.0 THC1 25000 
+# 3028.0 THC1 25000 
+# 3029.0 THC1 25000 
+# 3030.0 THC1 25000 
+# 3031.0 THC1 25000 
+# 3032.0 THC1 25000 
+# 3033.0 THC1 25000 
+# 3034.0 THC1 25000 
+# 3035.0 THC1 25000 
+# 3036.0 THC1 25000 
+# 3037.0 THC1 25000 
+# 3038.0 THC1 25000 
+# 3039.0 THC1 25000 
+# 3040.0 THC1 25000 
+# 3041.0 THC1 25000 
+# 3042.0 THC1 25000 
+# 3043.0 THC1 25000 
+# 3044.0 THC1 25000 
+# 3045.0 THC1 25000 
+# 3046.0 THC1 25000 
+# 3047.0 THC1 25000 
+# 3048.0 THC1 25000 
+# 3049.0 THC1 25000 
+# 3050.0 THC1 25000 
+# 3051.0 THC1 25000 
+# 3052.0 THC1 25000 
+# 3053.0 THC1 25000 
+# 3054.0 THC1 25000 
+# 3055.0 THC1 25000 
+# 3056.0 THC1 25000 
+# 3057.0 THC1 25000 
+# 3058.0 THC1 25000 
+# 3059.0 THC1 25000 
+# 3060.0 THC1 25000 
+# 3061.0 THC1 25000 
+# 3062.0 THC1 25000 
+# 3063.0 THC1 25000 
+# 3064.0 THC1 25000 
+# 3065.0 THC1 25000 
+# 3066.0 THC1 25000 
+# 3067.0 THC1 25000 
+# 3068.0 THC1 25000 
+# 3069.0 THC1 25000 
+# 3070.0 THC1 25000 
+# 3071.0 THC1 25000 
+# 3072.0 THC1 25000 
+# 3073.0 THC1 25000 
+# 3074.0 THC1 25000 
+# 3075.0 THC1 25000 
+# 3076.0 THC1 25000 
+# 3077.0 THC1 25000 
+# 3078.0 THC1 25000 
+# 3079.0 THC1 25000 
+# 3080.0 THC1 25000 
+# 3081.0 THC1 25000 
+# 3082.0 THC1 25000 
+# 3083.0 THC1 25000 
+# 3084.0 THC1 25000 
+# 3085.0 THC1 25000 
+# 3086.0 THC1 25000 
+# 3087.0 THC1 25000 
+# 3088.0 THC1 25000 
+# 3089.0 THC1 25000 
+# 3090.0 THC1 25000 
+# 3091.0 THC1 25000 
+# 3092.0 THC1 25000 
+# 3093.0 THC1 25000 
+# 3094.0 THC1 25000 
+# 3095.0 THC1 25000 
+# 3096.0 THC1 25000 
+# 3097.0 THC1 25000 
+# 3098.0 THC1 25000 
+# 3099.0 THC1 25000 
+# 3100.0 THC1 25000 
+# 3101.0 THC1 25000 
+# 3102.0 THC1 25000 
+# 3103.0 THC1 25000 
+# 3104.0 THC1 25000 
+# 3105.0 THC1 25000 
+# 3106.0 THC1 25000 
+# 3107.0 THC1 25000 
+# 3108.0 THC1 25000 
+# 3109.0 THC1 25000 
+# 3110.0 THC1 25000 
+# 3111.0 THC1 25000 
+# 3112.0 THC1 25000 
+# 3113.0 THC1 25000 
+# 3114.0 THC1 25000 
+# 3115.0 THC1 25000 
+# 3204.0 THC1 25000 
+# 3205.0 THC1 25000 
+# 3212.0 THC1 25000 
+# 3711.0 THC1 25000 
+# 3731.0 THC1 25000 
+# 3732.0 THC1 25000 
+# 7797.0 THC1 25000 
+# 7876.0 THC1 25000 
+# 7904.0 THC1 25000 
+# 7923.0 THC1 25000 
+
+CL_cluster_948	THC1	25000
+CL_cluster_952	THC1	25000
+CL_cluster_956	THC1	25000
+CL_cluster_1001	THC1	25000
+CL_cluster_1175	THC1	25000
+CL_cluster_1177	THC1	25000
+CL_cluster_1178	THC1	25000
+CL_cluster_1205	THC1	25000
+CL_cluster_1233	THC1	25000
+CL_cluster_1818	THC1	25000
+CL_cluster_1821	THC1	25000
+CL_cluster_1826	THC1	25000
+CL_cluster_1889	THC1	25000
+CL_cluster_1894	THC1	25000
+CL_cluster_2922	THC1	25000
+CL_cluster_2923	THC1	25000
+CL_cluster_2925	THC1	25000
+CL_cluster_2926	THC1	25000
+CL_cluster_2927	THC1	25000
+CL_cluster_2928	THC1	25000
+CL_cluster_2929	THC1	25000
+CL_cluster_2930	THC1	25000
+CL_cluster_2931	THC1	25000
+CL_cluster_2932	THC1	25000
+CL_cluster_2933	THC1	25000
+CL_cluster_2934	THC1	25000
+CL_cluster_2935	THC1	25000
+CL_cluster_2936	THC1	25000
+CL_cluster_2937	THC1	25000
+CL_cluster_2938	THC1	25000
+CL_cluster_2939	THC1	25000
+CL_cluster_2940	THC1	25000
+CL_cluster_2941	THC1	25000
+CL_cluster_2942	THC1	25000
+CL_cluster_2943	THC1	25000
+CL_cluster_2944	THC1	25000
+CL_cluster_2945	THC1	25000
+CL_cluster_2946	THC1	25000
+CL_cluster_2947	THC1	25000
+CL_cluster_2948	THC1	25000
+CL_cluster_2949	THC1	25000
+CL_cluster_2950	THC1	25000
+CL_cluster_2951	THC1	25000
+CL_cluster_2952	THC1	25000
+CL_cluster_2953	THC1	25000
+CL_cluster_2954	THC1	25000
+CL_cluster_2955	THC1	25000
+CL_cluster_2956	THC1	25000
+CL_cluster_2957	THC1	25000
+CL_cluster_2958	THC1	25000
+CL_cluster_2959	THC1	25000
+CL_cluster_2960	THC1	25000
+CL_cluster_2961	THC1	25000
+CL_cluster_2962	THC1	25000
+CL_cluster_2963	THC1	25000
+CL_cluster_2964	THC1	25000
+CL_cluster_2965	THC1	25000
+CL_cluster_2966	THC1	25000
+CL_cluster_2967	THC1	25000
+CL_cluster_2968	THC1	25000
+CL_cluster_2969	THC1	25000
+CL_cluster_2970	THC1	25000
+CL_cluster_2971	THC1	25000
+CL_cluster_2972	THC1	25000
+CL_cluster_2973	THC1	25000
+CL_cluster_2974	THC1	25000
+CL_cluster_2975	THC1	25000
+CL_cluster_2976	THC1	25000
+CL_cluster_2977	THC1	25000
+CL_cluster_2978	THC1	25000
+CL_cluster_2979	THC1	25000
+CL_cluster_2980	THC1	25000
+CL_cluster_2981	THC1	25000
+CL_cluster_2982	THC1	25000
+CL_cluster_2983	THC1	25000
+CL_cluster_2984	THC1	25000
+CL_cluster_2985	THC1	25000
+CL_cluster_2986	THC1	25000
+CL_cluster_2987	THC1	25000
+CL_cluster_2988	THC1	25000
+CL_cluster_2989	THC1	25000
+CL_cluster_2990	THC1	25000
+CL_cluster_2991	THC1	25000
+CL_cluster_2992	THC1	25000
+CL_cluster_2993	THC1	25000
+CL_cluster_2994	THC1	25000
+CL_cluster_2995	THC1	25000
+CL_cluster_2996	THC1	25000
+CL_cluster_2997	THC1	25000
+CL_cluster_2998	THC1	25000
+CL_cluster_2999	THC1	25000
+CL_cluster_3000	THC1	25000
+CL_cluster_3001	THC1	25000
+CL_cluster_3002	THC1	25000
+CL_cluster_3003	THC1	25000
+CL_cluster_3004	THC1	25000
+CL_cluster_3005	THC1	25000
+CL_cluster_3006	THC1	25000
+CL_cluster_3007	THC1	25000
+CL_cluster_3008	THC1	25000
+CL_cluster_3009	THC1	25000
+CL_cluster_3010	THC1	25000
+CL_cluster_3011	THC1	25000
+CL_cluster_3012	THC1	25000
+CL_cluster_3013	THC1	25000
+CL_cluster_3014	THC1	25000
+CL_cluster_3015	THC1	25000
+CL_cluster_3016	THC1	25000
+CL_cluster_3017	THC1	25000
+CL_cluster_3018	THC1	25000
+CL_cluster_3019	THC1	25000
+CL_cluster_3020	THC1	25000
+CL_cluster_3021	THC1	25000
+CL_cluster_3022	THC1	25000
+CL_cluster_3023	THC1	25000
+CL_cluster_3024	THC1	25000
+CL_cluster_3025	THC1	25000
+CL_cluster_3026	THC1	25000
+CL_cluster_3027	THC1	25000
+CL_cluster_3028	THC1	25000
+CL_cluster_3029	THC1	25000
+CL_cluster_3030	THC1	25000
+CL_cluster_3031	THC1	25000
+CL_cluster_3032	THC1	25000
+CL_cluster_3033	THC1	25000
+CL_cluster_3034	THC1	25000
+CL_cluster_3035	THC1	25000
+CL_cluster_3036	THC1	25000
+CL_cluster_3037	THC1	25000
+CL_cluster_3038	THC1	25000
+CL_cluster_3039	THC1	25000
+CL_cluster_3040	THC1	25000
+CL_cluster_3041	THC1	25000
+CL_cluster_3042	THC1	25000
+CL_cluster_3043	THC1	25000
+CL_cluster_3044	THC1	25000
+CL_cluster_3045	THC1	25000
+CL_cluster_3046	THC1	25000
+CL_cluster_3047	THC1	25000
+CL_cluster_3048	THC1	25000
+CL_cluster_3049	THC1	25000
+CL_cluster_3050	THC1	25000
+CL_cluster_3051	THC1	25000
+CL_cluster_3052	THC1	25000
+CL_cluster_3053	THC1	25000
+CL_cluster_3054	THC1	25000
+CL_cluster_3055	THC1	25000
+CL_cluster_3056	THC1	25000
+CL_cluster_3057	THC1	25000
+CL_cluster_3058	THC1	25000
+CL_cluster_3059	THC1	25000
+CL_cluster_3060	THC1	25000
+CL_cluster_3061	THC1	25000
+CL_cluster_3062	THC1	25000
+CL_cluster_3063	THC1	25000
+CL_cluster_3064	THC1	25000
+CL_cluster_3065	THC1	25000
+CL_cluster_3066	THC1	25000
+CL_cluster_3067	THC1	25000
+CL_cluster_3068	THC1	25000
+CL_cluster_3069	THC1	25000
+CL_cluster_3070	THC1	25000
+CL_cluster_3071	THC1	25000
+CL_cluster_3072	THC1	25000
+CL_cluster_3073	THC1	25000
+CL_cluster_3074	THC1	25000
+CL_cluster_3075	THC1	25000
+CL_cluster_3076	THC1	25000
+CL_cluster_3077	THC1	25000
+CL_cluster_3078	THC1	25000
+CL_cluster_3079	THC1	25000
+CL_cluster_3080	THC1	25000
+CL_cluster_3081	THC1	25000
+CL_cluster_3082	THC1	25000
+CL_cluster_3083	THC1	25000
+CL_cluster_3084	THC1	25000
+CL_cluster_3085	THC1	25000
+CL_cluster_3086	THC1	25000
+CL_cluster_3087	THC1	25000
+CL_cluster_3088	THC1	25000
+CL_cluster_3089	THC1	25000
+CL_cluster_3090	THC1	25000
+CL_cluster_3091	THC1	25000
+CL_cluster_3092	THC1	25000
+CL_cluster_3093	THC1	25000
+CL_cluster_3094	THC1	25000
+CL_cluster_3095	THC1	25000
+CL_cluster_3096	THC1	25000
+CL_cluster_3097	THC1	25000
+CL_cluster_3098	THC1	25000
+CL_cluster_3099	THC1	25000
+CL_cluster_3100	THC1	25000
+CL_cluster_3101	THC1	25000
+CL_cluster_3102	THC1	25000
+CL_cluster_3103	THC1	25000
+CL_cluster_3104	THC1	25000
+CL_cluster_3105	THC1	25000
+CL_cluster_3106	THC1	25000
+CL_cluster_3107	THC1	25000
+CL_cluster_3108	THC1	25000
+CL_cluster_3109	THC1	25000
+CL_cluster_3110	THC1	25000
+CL_cluster_3111	THC1	25000
+CL_cluster_3112	THC1	25000
+CL_cluster_3113	THC1	25000
+CL_cluster_3114	THC1	25000
+CL_cluster_3115	THC1	25000
+CL_cluster_3204	THC1	25000
+CL_cluster_3205	THC1	25000
+CL_cluster_3212	THC1	25000
+CL_cluster_3711	THC1	25000
+CL_cluster_3731	THC1	25000
+CL_cluster_3732	THC1	25000
+CL_cluster_7797	THC1	25000
+CL_cluster_7876	THC1	25000
+CL_cluster_7904	THC1	25000
+CL_cluster_7923	THC1	25000
+
+;
+
+param D1_2:=
+3118602190990 SHC1 20000 
+3118602191229 SHC1 20000 
+3118602190591 SHC1 20000 
+3118602190567 SHC1 20000 
+3118602190532 SHC1 20000 
+3118602190494 SHC1 20000 
+3118602190869 SHC1 20000 
+3118602190605 SHC1 20000 
+3118602190109 SHC1 20000 
+3118607116306 SHC1 20000 
+3118602190931 SHC1 20000 
+3118602190923 SHC1 20000 
+3118602190893 SHC1 20000 
+3118602190486 SHC1 20000 
+3118602190915 SHC1 20000 
+3118602190222 SHC1 20000 
+3118604696077 SHC1 20000 
+3118602191024 SHC1 20000 
+3118602190478 SHC1 20000 
+3118602190389 SHC1 20000 
+3118607110316 SHC1 20000 
+3118602220261 SHC1 20000 
+3118602190397 SHC1 20000 
+3118602190176 SHC1 20000 
+3118602191059 SHC1 20000 
+3118602191040 SHC1 20000 
+3118602190451 SHC1 20000 
+3118602190206 SHC1 20000 
+3118602190966 SHC1 20000 
+3118602190400 SHC1 20000 
+3118602190877 SHC1 20000 
+3118602190826 SHC1 20000 
+3118602190729 SHC1 20000 
+3118602190656 SHC1 20000 
+3118602190834 SHC1 20000 
+3118602190710 SHC1 20000 
+3118602190796 SHC1 20000 
+3118602190648 SHC1 20000 
+3118602190818 SHC1 20000 
+3118602190885 SHC1 20000 
+3118607053355 SHC1 20000 
+CL_cluster_948 SHC1 20000 
+CL_cluster_952 SHC1 20000 
+CL_cluster_956 SHC1 20000 
+CL_cluster_1001 SHC1 20000 
+CL_cluster_1175 SHC1 20000 
+CL_cluster_1177 SHC1 20000 
+CL_cluster_1178 SHC1 20000 
+CL_cluster_1205 SHC1 20000 
+CL_cluster_1233 SHC1 20000 
+CL_cluster_1818 SHC1 20000 
+CL_cluster_1821 SHC1 20000 
+CL_cluster_1826 SHC1 20000 
+CL_cluster_1889 SHC1 20000 
+CL_cluster_1894 SHC1 20000 
+CL_cluster_2922 SHC1 20000 
+CL_cluster_2923 SHC1 20000 
+CL_cluster_2925 SHC1 20000 
+CL_cluster_2926 SHC1 20000 
+CL_cluster_2927 SHC1 20000 
+CL_cluster_2928 SHC1 20000 
+CL_cluster_2929 SHC1 20000 
+CL_cluster_2930 SHC1 20000 
+CL_cluster_2931 SHC1 20000 
+CL_cluster_2932 SHC1 20000 
+CL_cluster_2933 SHC1 20000 
+CL_cluster_2934 SHC1 20000 
+CL_cluster_2935 SHC1 20000 
+CL_cluster_2936 SHC1 20000 
+CL_cluster_2937 SHC1 20000 
+CL_cluster_2938 SHC1 20000 
+CL_cluster_2939 SHC1 20000 
+CL_cluster_2940 SHC1 20000 
+CL_cluster_2941 SHC1 20000 
+CL_cluster_2942 SHC1 20000 
+CL_cluster_2943 SHC1 20000 
+CL_cluster_2944 SHC1 20000 
+CL_cluster_2945 SHC1 20000 
+CL_cluster_2946 SHC1 20000 
+CL_cluster_2947 SHC1 20000 
+CL_cluster_2948 SHC1 20000 
+CL_cluster_2949 SHC1 20000 
+CL_cluster_2950 SHC1 20000 
+CL_cluster_2951 SHC1 20000 
+CL_cluster_2952 SHC1 20000 
+CL_cluster_2953 SHC1 20000 
+CL_cluster_2954 SHC1 20000 
+CL_cluster_2955 SHC1 20000 
+CL_cluster_2956 SHC1 20000 
+CL_cluster_2957 SHC1 20000 
+CL_cluster_2958 SHC1 20000 
+CL_cluster_2959 SHC1 20000 
+CL_cluster_2960 SHC1 20000 
+CL_cluster_2961 SHC1 20000 
+CL_cluster_2962 SHC1 20000 
+CL_cluster_2963 SHC1 20000 
+CL_cluster_2964 SHC1 20000 
+CL_cluster_2965 SHC1 20000 
+CL_cluster_2966 SHC1 20000 
+CL_cluster_2967 SHC1 20000 
+CL_cluster_2968 SHC1 20000 
+CL_cluster_2969 SHC1 20000 
+CL_cluster_2970 SHC1 20000 
+CL_cluster_2971 SHC1 20000 
+CL_cluster_2972 SHC1 20000 
+CL_cluster_2973 SHC1 20000 
+CL_cluster_2974 SHC1 20000 
+CL_cluster_2975 SHC1 20000 
+CL_cluster_2976 SHC1 20000 
+CL_cluster_2977 SHC1 20000 
+CL_cluster_2978 SHC1 20000 
+CL_cluster_2979 SHC1 20000 
+CL_cluster_2980 SHC1 20000 
+CL_cluster_2981 SHC1 20000 
+CL_cluster_2982 SHC1 20000 
+CL_cluster_2983 SHC1 20000 
+CL_cluster_2984 SHC1 20000 
+CL_cluster_2985 SHC1 20000 
+CL_cluster_2986 SHC1 20000 
+CL_cluster_2987 SHC1 20000 
+CL_cluster_2988 SHC1 20000 
+CL_cluster_2989 SHC1 20000 
+CL_cluster_2990 SHC1 20000 
+CL_cluster_2991 SHC1 20000 
+CL_cluster_2992 SHC1 20000 
+CL_cluster_2993 SHC1 20000 
+CL_cluster_2994 SHC1 20000 
+CL_cluster_2995 SHC1 20000 
+CL_cluster_2996 SHC1 20000 
+CL_cluster_2997 SHC1 20000 
+CL_cluster_2998 SHC1 20000 
+CL_cluster_2999 SHC1 20000 
+CL_cluster_3000 SHC1 20000 
+CL_cluster_3001 SHC1 20000 
+CL_cluster_3002 SHC1 20000 
+CL_cluster_3003 SHC1 20000 
+CL_cluster_3004 SHC1 20000 
+CL_cluster_3005 SHC1 20000 
+CL_cluster_3006 SHC1 20000 
+CL_cluster_3007 SHC1 20000 
+CL_cluster_3008 SHC1 20000 
+CL_cluster_3009 SHC1 20000 
+CL_cluster_3010 SHC1 20000 
+CL_cluster_3011 SHC1 20000 
+CL_cluster_3012 SHC1 20000 
+CL_cluster_3013 SHC1 20000 
+CL_cluster_3014 SHC1 20000 
+CL_cluster_3015 SHC1 20000 
+CL_cluster_3016 SHC1 20000 
+CL_cluster_3017 SHC1 20000 
+CL_cluster_3018 SHC1 20000 
+CL_cluster_3019 SHC1 20000 
+CL_cluster_3020 SHC1 20000 
+CL_cluster_3021 SHC1 20000 
+CL_cluster_3022 SHC1 20000 
+CL_cluster_3023 SHC1 20000 
+CL_cluster_3024 SHC1 20000 
+CL_cluster_3025 SHC1 20000 
+CL_cluster_3026 SHC1 20000 
+CL_cluster_3027 SHC1 20000 
+CL_cluster_3028 SHC1 20000 
+CL_cluster_3029 SHC1 20000 
+CL_cluster_3030 SHC1 20000 
+CL_cluster_3031 SHC1 20000 
+CL_cluster_3032 SHC1 20000 
+CL_cluster_3033 SHC1 20000 
+CL_cluster_3034 SHC1 20000 
+CL_cluster_3035 SHC1 20000 
+CL_cluster_3036 SHC1 20000 
+CL_cluster_3037 SHC1 20000 
+CL_cluster_3038 SHC1 20000 
+CL_cluster_3039 SHC1 20000 
+CL_cluster_3040 SHC1 20000 
+CL_cluster_3041 SHC1 20000 
+CL_cluster_3042 SHC1 20000 
+CL_cluster_3043 SHC1 20000 
+CL_cluster_3044 SHC1 20000 
+CL_cluster_3045 SHC1 20000 
+CL_cluster_3046 SHC1 20000 
+CL_cluster_3047 SHC1 20000 
+CL_cluster_3048 SHC1 20000 
+CL_cluster_3049 SHC1 20000 
+CL_cluster_3050 SHC1 20000 
+CL_cluster_3051 SHC1 20000 
+CL_cluster_3052 SHC1 20000 
+CL_cluster_3053 SHC1 20000 
+CL_cluster_3054 SHC1 20000 
+CL_cluster_3055 SHC1 20000 
+CL_cluster_3056 SHC1 20000 
+CL_cluster_3057 SHC1 20000 
+CL_cluster_3058 SHC1 20000 
+CL_cluster_3059 SHC1 20000 
+CL_cluster_3060 SHC1 20000 
+CL_cluster_3061 SHC1 20000 
+CL_cluster_3062 SHC1 20000 
+CL_cluster_3063 SHC1 20000 
+CL_cluster_3064 SHC1 20000 
+CL_cluster_3065 SHC1 20000 
+CL_cluster_3066 SHC1 20000 
+CL_cluster_3067 SHC1 20000 
+CL_cluster_3068 SHC1 20000 
+CL_cluster_3069 SHC1 20000 
+CL_cluster_3070 SHC1 20000 
+CL_cluster_3071 SHC1 20000 
+CL_cluster_3072 SHC1 20000 
+CL_cluster_3073 SHC1 20000 
+CL_cluster_3074 SHC1 20000 
+CL_cluster_3075 SHC1 20000 
+CL_cluster_3076 SHC1 20000 
+CL_cluster_3077 SHC1 20000 
+CL_cluster_3078 SHC1 20000 
+CL_cluster_3079 SHC1 20000 
+CL_cluster_3080 SHC1 20000 
+CL_cluster_3081 SHC1 20000 
+CL_cluster_3082 SHC1 20000 
+CL_cluster_3083 SHC1 20000 
+CL_cluster_3084 SHC1 20000 
+CL_cluster_3085 SHC1 20000 
+CL_cluster_3086 SHC1 20000 
+CL_cluster_3087 SHC1 20000 
+CL_cluster_3088 SHC1 20000 
+CL_cluster_3089 SHC1 20000 
+CL_cluster_3090 SHC1 20000 
+CL_cluster_3091 SHC1 20000 
+CL_cluster_3092 SHC1 20000 
+CL_cluster_3093 SHC1 20000 
+CL_cluster_3094 SHC1 20000 
+CL_cluster_3095 SHC1 20000 
+CL_cluster_3096 SHC1 20000 
+CL_cluster_3097 SHC1 20000 
+CL_cluster_3098 SHC1 20000 
+CL_cluster_3099 SHC1 20000 
+CL_cluster_3100 SHC1 20000 
+CL_cluster_3101 SHC1 20000 
+CL_cluster_3102 SHC1 20000 
+CL_cluster_3103 SHC1 20000 
+CL_cluster_3104 SHC1 20000 
+CL_cluster_3105 SHC1 20000 
+CL_cluster_3106 SHC1 20000 
+CL_cluster_3107 SHC1 20000 
+CL_cluster_3108 SHC1 20000 
+CL_cluster_3109 SHC1 20000 
+CL_cluster_3110 SHC1 20000 
+CL_cluster_3111 SHC1 20000 
+CL_cluster_3112 SHC1 20000 
+CL_cluster_3113 SHC1 20000 
+CL_cluster_3114 SHC1 20000 
+CL_cluster_3115 SHC1 20000 
+CL_cluster_3204 SHC1 20000 
+CL_cluster_3205 SHC1 20000 
+CL_cluster_3212 SHC1 20000 
+CL_cluster_3711 SHC1 20000 
+CL_cluster_3731 SHC1 20000 
+CL_cluster_3732 SHC1 20000 
+CL_cluster_7797 SHC1 20000 
+CL_cluster_7876 SHC1 20000 
+CL_cluster_7904 SHC1 20000 
+CL_cluster_7923 SHC1 20000 
+;
+
+param D1_3:=
+3118602190990 THC1 25000 
+3118602191229 THC1 25000 
+3118602190591 THC1 25000 
+3118602190567 THC1 25000 
+3118602190532 THC1 25000 
+3118602190494 THC1 25000 
+3118602190869 THC1 25000 
+3118602190605 THC1 25000 
+3118602190109 THC1 25000 
+3118607116306 THC1 25000 
+3118602190931 THC1 25000 
+3118602190923 THC1 25000 
+3118602190893 THC1 25000 
+3118602190486 THC1 25000 
+3118602190915 THC1 25000 
+3118602190222 THC1 25000 
+3118604696077 THC1 25000 
+3118602191024 THC1 25000 
+3118602190478 THC1 25000 
+3118602190389 THC1 25000 
+3118607110316 THC1 25000 
+3118602220261 THC1 25000 
+3118602190397 THC1 25000 
+3118602190176 THC1 25000 
+3118602191059 THC1 25000 
+3118602191040 THC1 25000 
+3118602190451 THC1 25000 
+3118602190206 THC1 25000 
+3118602190966 THC1 25000 
+3118602190400 THC1 25000 
+3118602190877 THC1 25000 
+3118602190826 THC1 25000 
+3118602190729 THC1 25000 
+3118602190656 THC1 25000 
+3118602190834 THC1 25000 
+3118602190710 THC1 25000 
+3118602190796 THC1 25000 
+3118602190648 THC1 25000 
+3118602190818 THC1 25000 
+3118602190885 THC1 25000 
+3118607053355 THC1 25000 
+CL_cluster_948 THC1 25000 
+CL_cluster_952 THC1 25000 
+CL_cluster_956 THC1 25000 
+CL_cluster_1001 THC1 25000 
+CL_cluster_1175 THC1 25000 
+CL_cluster_1177 THC1 25000 
+CL_cluster_1178 THC1 25000 
+CL_cluster_1205 THC1 25000 
+CL_cluster_1233 THC1 25000 
+CL_cluster_1818 THC1 25000 
+CL_cluster_1821 THC1 25000 
+CL_cluster_1826 THC1 25000 
+CL_cluster_1889 THC1 25000 
+CL_cluster_1894 THC1 25000 
+CL_cluster_2922 THC1 25000 
+CL_cluster_2923 THC1 25000 
+CL_cluster_2925 THC1 25000 
+CL_cluster_2926 THC1 25000 
+CL_cluster_2927 THC1 25000 
+CL_cluster_2928 THC1 25000 
+CL_cluster_2929 THC1 25000 
+CL_cluster_2930 THC1 25000 
+CL_cluster_2931 THC1 25000 
+CL_cluster_2932 THC1 25000 
+CL_cluster_2933 THC1 25000 
+CL_cluster_2934 THC1 25000 
+CL_cluster_2935 THC1 25000 
+CL_cluster_2936 THC1 25000 
+CL_cluster_2937 THC1 25000 
+CL_cluster_2938 THC1 25000 
+CL_cluster_2939 THC1 25000 
+CL_cluster_2940 THC1 25000 
+CL_cluster_2941 THC1 25000 
+CL_cluster_2942 THC1 25000 
+CL_cluster_2943 THC1 25000 
+CL_cluster_2944 THC1 25000 
+CL_cluster_2945 THC1 25000 
+CL_cluster_2946 THC1 25000 
+CL_cluster_2947 THC1 25000 
+CL_cluster_2948 THC1 25000 
+CL_cluster_2949 THC1 25000 
+CL_cluster_2950 THC1 25000 
+CL_cluster_2951 THC1 25000 
+CL_cluster_2952 THC1 25000 
+CL_cluster_2953 THC1 25000 
+CL_cluster_2954 THC1 25000 
+CL_cluster_2955 THC1 25000 
+CL_cluster_2956 THC1 25000 
+CL_cluster_2957 THC1 25000 
+CL_cluster_2958 THC1 25000 
+CL_cluster_2959 THC1 25000 
+CL_cluster_2960 THC1 25000 
+CL_cluster_2961 THC1 25000 
+CL_cluster_2962 THC1 25000 
+CL_cluster_2963 THC1 25000 
+CL_cluster_2964 THC1 25000 
+CL_cluster_2965 THC1 25000 
+CL_cluster_2966 THC1 25000 
+CL_cluster_2967 THC1 25000 
+CL_cluster_2968 THC1 25000 
+CL_cluster_2969 THC1 25000 
+CL_cluster_2970 THC1 25000 
+CL_cluster_2971 THC1 25000 
+CL_cluster_2972 THC1 25000 
+CL_cluster_2973 THC1 25000 
+CL_cluster_2974 THC1 25000 
+CL_cluster_2975 THC1 25000 
+CL_cluster_2976 THC1 25000 
+CL_cluster_2977 THC1 25000 
+CL_cluster_2978 THC1 25000 
+CL_cluster_2979 THC1 25000 
+CL_cluster_2980 THC1 25000 
+CL_cluster_2981 THC1 25000 
+CL_cluster_2982 THC1 25000 
+CL_cluster_2983 THC1 25000 
+CL_cluster_2984 THC1 25000 
+CL_cluster_2985 THC1 25000 
+CL_cluster_2986 THC1 25000 
+CL_cluster_2987 THC1 25000 
+CL_cluster_2988 THC1 25000 
+CL_cluster_2989 THC1 25000 
+CL_cluster_2990 THC1 25000 
+CL_cluster_2991 THC1 25000 
+CL_cluster_2992 THC1 25000 
+CL_cluster_2993 THC1 25000 
+CL_cluster_2994 THC1 25000 
+CL_cluster_2995 THC1 25000 
+CL_cluster_2996 THC1 25000 
+CL_cluster_2997 THC1 25000 
+CL_cluster_2998 THC1 25000 
+CL_cluster_2999 THC1 25000 
+CL_cluster_3000 THC1 25000 
+CL_cluster_3001 THC1 25000 
+CL_cluster_3002 THC1 25000 
+CL_cluster_3003 THC1 25000 
+CL_cluster_3004 THC1 25000 
+CL_cluster_3005 THC1 25000 
+CL_cluster_3006 THC1 25000 
+CL_cluster_3007 THC1 25000 
+CL_cluster_3008 THC1 25000 
+CL_cluster_3009 THC1 25000 
+CL_cluster_3010 THC1 25000 
+CL_cluster_3011 THC1 25000 
+CL_cluster_3012 THC1 25000 
+CL_cluster_3013 THC1 25000 
+CL_cluster_3014 THC1 25000 
+CL_cluster_3015 THC1 25000 
+CL_cluster_3016 THC1 25000 
+CL_cluster_3017 THC1 25000 
+CL_cluster_3018 THC1 25000 
+CL_cluster_3019 THC1 25000 
+CL_cluster_3020 THC1 25000 
+CL_cluster_3021 THC1 25000 
+CL_cluster_3022 THC1 25000 
+CL_cluster_3023 THC1 25000 
+CL_cluster_3024 THC1 25000 
+CL_cluster_3025 THC1 25000 
+CL_cluster_3026 THC1 25000 
+CL_cluster_3027 THC1 25000 
+CL_cluster_3028 THC1 25000 
+CL_cluster_3029 THC1 25000 
+CL_cluster_3030 THC1 25000 
+CL_cluster_3031 THC1 25000 
+CL_cluster_3032 THC1 25000 
+CL_cluster_3033 THC1 25000 
+CL_cluster_3034 THC1 25000 
+CL_cluster_3035 THC1 25000 
+CL_cluster_3036 THC1 25000 
+CL_cluster_3037 THC1 25000 
+CL_cluster_3038 THC1 25000 
+CL_cluster_3039 THC1 25000 
+CL_cluster_3040 THC1 25000 
+CL_cluster_3041 THC1 25000 
+CL_cluster_3042 THC1 25000 
+CL_cluster_3043 THC1 25000 
+CL_cluster_3044 THC1 25000 
+CL_cluster_3045 THC1 25000 
+CL_cluster_3046 THC1 25000 
+CL_cluster_3047 THC1 25000 
+CL_cluster_3048 THC1 25000 
+CL_cluster_3049 THC1 25000 
+CL_cluster_3050 THC1 25000 
+CL_cluster_3051 THC1 25000 
+CL_cluster_3052 THC1 25000 
+CL_cluster_3053 THC1 25000 
+CL_cluster_3054 THC1 25000 
+CL_cluster_3055 THC1 25000 
+CL_cluster_3056 THC1 25000 
+CL_cluster_3057 THC1 25000 
+CL_cluster_3058 THC1 25000 
+CL_cluster_3059 THC1 25000 
+CL_cluster_3060 THC1 25000 
+CL_cluster_3061 THC1 25000 
+CL_cluster_3062 THC1 25000 
+CL_cluster_3063 THC1 25000 
+CL_cluster_3064 THC1 25000 
+CL_cluster_3065 THC1 25000 
+CL_cluster_3066 THC1 25000 
+CL_cluster_3067 THC1 25000 
+CL_cluster_3068 THC1 25000 
+CL_cluster_3069 THC1 25000 
+CL_cluster_3070 THC1 25000 
+CL_cluster_3071 THC1 25000 
+CL_cluster_3072 THC1 25000 
+CL_cluster_3073 THC1 25000 
+CL_cluster_3074 THC1 25000 
+CL_cluster_3075 THC1 25000 
+CL_cluster_3076 THC1 25000 
+CL_cluster_3077 THC1 25000 
+CL_cluster_3078 THC1 25000 
+CL_cluster_3079 THC1 25000 
+CL_cluster_3080 THC1 25000 
+CL_cluster_3081 THC1 25000 
+CL_cluster_3082 THC1 25000 
+CL_cluster_3083 THC1 25000 
+CL_cluster_3084 THC1 25000 
+CL_cluster_3085 THC1 25000 
+CL_cluster_3086 THC1 25000 
+CL_cluster_3087 THC1 25000 
+CL_cluster_3088 THC1 25000 
+CL_cluster_3089 THC1 25000 
+CL_cluster_3090 THC1 25000 
+CL_cluster_3091 THC1 25000 
+CL_cluster_3092 THC1 25000 
+CL_cluster_3093 THC1 25000 
+CL_cluster_3094 THC1 25000 
+CL_cluster_3095 THC1 25000 
+CL_cluster_3096 THC1 25000 
+CL_cluster_3097 THC1 25000 
+CL_cluster_3098 THC1 25000 
+CL_cluster_3099 THC1 25000 
+CL_cluster_3100 THC1 25000 
+CL_cluster_3101 THC1 25000 
+CL_cluster_3102 THC1 25000 
+CL_cluster_3103 THC1 25000 
+CL_cluster_3104 THC1 25000 
+CL_cluster_3105 THC1 25000 
+CL_cluster_3106 THC1 25000 
+CL_cluster_3107 THC1 25000 
+CL_cluster_3108 THC1 25000 
+CL_cluster_3109 THC1 25000 
+CL_cluster_3110 THC1 25000 
+CL_cluster_3111 THC1 25000 
+CL_cluster_3112 THC1 25000 
+CL_cluster_3113 THC1 25000 
+CL_cluster_3114 THC1 25000 
+CL_cluster_3115 THC1 25000 
+CL_cluster_3204 THC1 25000 
+CL_cluster_3205 THC1 25000 
+CL_cluster_3212 THC1 25000 
+CL_cluster_3711 THC1 25000 
+CL_cluster_3731 THC1 25000 
+CL_cluster_3732 THC1 25000 
+CL_cluster_7797 THC1 25000 
+CL_cluster_7876 THC1 25000 
+CL_cluster_7904 THC1 25000 
+CL_cluster_7923 THC1 25000 
+;
+
+param D2_3:=
+SHC1	THC1	20000;
+param CNES1(tr):	eSF	eSB	eMulti ACS:=
+3118602190990 3.0 2.0 0.0 0 
+3118602191229 2.0 1.0 0.0 0 
+3118602190591 3.0 1.0 1.0 0 
+3118602190567 1.0 0.0 0.0 0 
+3118602190532 3.0 2.0 0.0 0 
+3118602190494 2.0 0.0 0.0 0 
+3118602190869 1.0 0.0 0.0 0 
+3118602190605 1.0 0.0 0.0 0 
+3118602190109 1.0 0.0 0.0 0 
+3118607116306 2.0 0.0 0.0 0 
+3118602190931 2.0 1.0 1.0 0 
+3118602190923 6.0 2.0 1.0 0 
+3118602190893 5.0 2.0 0.0 0 
+3118602190486 4.0 2.0 1.0 0 
+3118602190915 2.0 0.0 0.0 4 
+3118602190222 3.0 1.0 1.0 0 
+3118604696077 3.0 2.0 0.0 0 
+3118602191024 1.0 0.0 0.0 0 
+3118602190478 1.0 0.0 0.0 1 
+3118602190389 2.0 0.0 0.0 1 
+3118607110316 5.0 2.0 1.0 1 
+3118602220261 1.0 0.0 0.0 2 
+3118602190397 1.0 0.0 0.0 0 
+3118602190176 1.0 0.0 0.0 0 
+3118602191059 4.0 4.0 0.0 3 
+3118602191040 1.0 0.0 0.0 0 
+3118602190451 2.0 1.0 0.0 0 
+3118602190206 2.0 2.0 0.0 3 
+3118602190966 1.0 0.0 0.0 0 
+3118602190400 1.0 0.0 0.0 0 
+3118602190877 2.0 1.0 0.0 0 
+3118602190826 3.0 1.0 0.0 0 
+3118602190729 2.0 0.0 0.0 3 
+3118602190656 2.0 2.0 1.0 0 
+3118602190834 1.0 0.0 0.0 0 
+3118602190710 1.0 0.0 0.0 6 
+3118602190796 1.0 0.0 0.0 0 
+3118602190648 1.0 0.0 0.0 0 
+3118602190818 3.0 0.0 0.0 4 
+3118602190885 3.0 1.0 0.0 0 
+3118607053355 1.0 0.0 0.0 2 
+;
+
+param CNES2: SHC1:=
+EQ2	10
+;
+
+param CNES3: THC1:=
+EQ3	10
+;
+
+param C2:=
+SHC1	4000000 #Alterado manualmente!
+;
+
+param C3:=
+THC1	4000000 #Alterado manualmente
+;
+
+param U:=
+1 30 
+2 1 
+3 1 
+;
+
+param:	 O1_0    O1_2    O1_3:=
+3118602190990 0.71 0.2 0.05 
+3118602191229 0.71 0.2 0.05 
+3118602190591 0.71 0.2 0.05 
+3118602190567 0.71 0.2 0.05 
+3118602190532 0.71 0.2 0.05 
+3118602190494 0.71 0.2 0.05 
+3118602190869 0.71 0.2 0.05 
+3118602190605 0.71 0.2 0.05 
+3118602190109 0.71 0.2 0.05 
+3118607116306 0.71 0.2 0.05 
+3118602190931 0.71 0.2 0.05 
+3118602190923 0.71 0.2 0.05 
+3118602190893 0.71 0.2 0.05 
+3118602190486 0.71 0.2 0.05 
+3118602190915 0.71 0.2 0.05 
+3118602190222 0.71 0.2 0.05 
+3118604696077 0.71 0.2 0.05 
+3118602191024 0.71 0.2 0.05 
+3118602190478 0.71 0.2 0.05 
+3118602190389 0.71 0.2 0.05 
+3118607110316 0.71 0.2 0.05 
+3118602220261 0.71 0.2 0.05 
+3118602190397 0.71 0.2 0.05 
+3118602190176 0.71 0.2 0.05 
+3118602191059 0.71 0.2 0.05 
+3118602191040 0.71 0.2 0.05 
+3118602190451 0.71 0.2 0.05 
+3118602190206 0.71 0.2 0.05 
+3118602190966 0.71 0.2 0.05 
+3118602190400 0.71 0.2 0.05 
+3118602190877 0.71 0.2 0.05 
+3118602190826 0.71 0.2 0.05 
+3118602190729 0.71 0.2 0.05 
+3118602190656 0.71 0.2 0.05 
+3118602190834 0.71 0.2 0.05 
+3118602190710 0.71 0.2 0.05 
+3118602190796 0.71 0.2 0.05 
+3118602190648 0.71 0.2 0.05 
+3118602190818 0.71 0.2 0.05 
+3118602190885 0.71 0.2 0.05 
+3118607053355 0.71 0.2 0.05 
+CL_cluster_948 0.71 0.2 0.05 
+CL_cluster_952 0.71 0.2 0.05 
+CL_cluster_956 0.71 0.2 0.05 
+CL_cluster_1001 0.71 0.2 0.05 
+CL_cluster_1175 0.71 0.2 0.05 
+CL_cluster_1177 0.71 0.2 0.05 
+CL_cluster_1178 0.71 0.2 0.05 
+CL_cluster_1205 0.71 0.2 0.05 
+CL_cluster_1233 0.71 0.2 0.05 
+CL_cluster_1818 0.71 0.2 0.05 
+CL_cluster_1821 0.71 0.2 0.05 
+CL_cluster_1826 0.71 0.2 0.05 
+CL_cluster_1889 0.71 0.2 0.05 
+CL_cluster_1894 0.71 0.2 0.05 
+CL_cluster_2922 0.71 0.2 0.05 
+CL_cluster_2923 0.71 0.2 0.05 
+CL_cluster_2925 0.71 0.2 0.05 
+CL_cluster_2926 0.71 0.2 0.05 
+CL_cluster_2927 0.71 0.2 0.05 
+CL_cluster_2928 0.71 0.2 0.05 
+CL_cluster_2929 0.71 0.2 0.05 
+CL_cluster_2930 0.71 0.2 0.05 
+CL_cluster_2931 0.71 0.2 0.05 
+CL_cluster_2932 0.71 0.2 0.05 
+CL_cluster_2933 0.71 0.2 0.05 
+CL_cluster_2934 0.71 0.2 0.05 
+CL_cluster_2935 0.71 0.2 0.05 
+CL_cluster_2936 0.71 0.2 0.05 
+CL_cluster_2937 0.71 0.2 0.05 
+CL_cluster_2938 0.71 0.2 0.05 
+CL_cluster_2939 0.71 0.2 0.05 
+CL_cluster_2940 0.71 0.2 0.05 
+CL_cluster_2941 0.71 0.2 0.05 
+CL_cluster_2942 0.71 0.2 0.05 
+CL_cluster_2943 0.71 0.2 0.05 
+CL_cluster_2944 0.71 0.2 0.05 
+CL_cluster_2945 0.71 0.2 0.05 
+CL_cluster_2946 0.71 0.2 0.05 
+CL_cluster_2947 0.71 0.2 0.05 
+CL_cluster_2948 0.71 0.2 0.05 
+CL_cluster_2949 0.71 0.2 0.05 
+CL_cluster_2950 0.71 0.2 0.05 
+CL_cluster_2951 0.71 0.2 0.05 
+CL_cluster_2952 0.71 0.2 0.05 
+CL_cluster_2953 0.71 0.2 0.05 
+CL_cluster_2954 0.71 0.2 0.05 
+CL_cluster_2955 0.71 0.2 0.05 
+CL_cluster_2956 0.71 0.2 0.05 
+CL_cluster_2957 0.71 0.2 0.05 
+CL_cluster_2958 0.71 0.2 0.05 
+CL_cluster_2959 0.71 0.2 0.05 
+CL_cluster_2960 0.71 0.2 0.05 
+CL_cluster_2961 0.71 0.2 0.05 
+CL_cluster_2962 0.71 0.2 0.05 
+CL_cluster_2963 0.71 0.2 0.05 
+CL_cluster_2964 0.71 0.2 0.05 
+CL_cluster_2965 0.71 0.2 0.05 
+CL_cluster_2966 0.71 0.2 0.05 
+CL_cluster_2967 0.71 0.2 0.05 
+CL_cluster_2968 0.71 0.2 0.05 
+CL_cluster_2969 0.71 0.2 0.05 
+CL_cluster_2970 0.71 0.2 0.05 
+CL_cluster_2971 0.71 0.2 0.05 
+CL_cluster_2972 0.71 0.2 0.05 
+CL_cluster_2973 0.71 0.2 0.05 
+CL_cluster_2974 0.71 0.2 0.05 
+CL_cluster_2975 0.71 0.2 0.05 
+CL_cluster_2976 0.71 0.2 0.05 
+CL_cluster_2977 0.71 0.2 0.05 
+CL_cluster_2978 0.71 0.2 0.05 
+CL_cluster_2979 0.71 0.2 0.05 
+CL_cluster_2980 0.71 0.2 0.05 
+CL_cluster_2981 0.71 0.2 0.05 
+CL_cluster_2982 0.71 0.2 0.05 
+CL_cluster_2983 0.71 0.2 0.05 
+CL_cluster_2984 0.71 0.2 0.05 
+CL_cluster_2985 0.71 0.2 0.05 
+CL_cluster_2986 0.71 0.2 0.05 
+CL_cluster_2987 0.71 0.2 0.05 
+CL_cluster_2988 0.71 0.2 0.05 
+CL_cluster_2989 0.71 0.2 0.05 
+CL_cluster_2990 0.71 0.2 0.05 
+CL_cluster_2991 0.71 0.2 0.05 
+CL_cluster_2992 0.71 0.2 0.05 
+CL_cluster_2993 0.71 0.2 0.05 
+CL_cluster_2994 0.71 0.2 0.05 
+CL_cluster_2995 0.71 0.2 0.05 
+CL_cluster_2996 0.71 0.2 0.05 
+CL_cluster_2997 0.71 0.2 0.05 
+CL_cluster_2998 0.71 0.2 0.05 
+CL_cluster_2999 0.71 0.2 0.05 
+CL_cluster_3000 0.71 0.2 0.05 
+CL_cluster_3001 0.71 0.2 0.05 
+CL_cluster_3002 0.71 0.2 0.05 
+CL_cluster_3003 0.71 0.2 0.05 
+CL_cluster_3004 0.71 0.2 0.05 
+CL_cluster_3005 0.71 0.2 0.05 
+CL_cluster_3006 0.71 0.2 0.05 
+CL_cluster_3007 0.71 0.2 0.05 
+CL_cluster_3008 0.71 0.2 0.05 
+CL_cluster_3009 0.71 0.2 0.05 
+CL_cluster_3010 0.71 0.2 0.05 
+CL_cluster_3011 0.71 0.2 0.05 
+CL_cluster_3012 0.71 0.2 0.05 
+CL_cluster_3013 0.71 0.2 0.05 
+CL_cluster_3014 0.71 0.2 0.05 
+CL_cluster_3015 0.71 0.2 0.05 
+CL_cluster_3016 0.71 0.2 0.05 
+CL_cluster_3017 0.71 0.2 0.05 
+CL_cluster_3018 0.71 0.2 0.05 
+CL_cluster_3019 0.71 0.2 0.05 
+CL_cluster_3020 0.71 0.2 0.05 
+CL_cluster_3021 0.71 0.2 0.05 
+CL_cluster_3022 0.71 0.2 0.05 
+CL_cluster_3023 0.71 0.2 0.05 
+CL_cluster_3024 0.71 0.2 0.05 
+CL_cluster_3025 0.71 0.2 0.05 
+CL_cluster_3026 0.71 0.2 0.05 
+CL_cluster_3027 0.71 0.2 0.05 
+CL_cluster_3028 0.71 0.2 0.05 
+CL_cluster_3029 0.71 0.2 0.05 
+CL_cluster_3030 0.71 0.2 0.05 
+CL_cluster_3031 0.71 0.2 0.05 
+CL_cluster_3032 0.71 0.2 0.05 
+CL_cluster_3033 0.71 0.2 0.05 
+CL_cluster_3034 0.71 0.2 0.05 
+CL_cluster_3035 0.71 0.2 0.05 
+CL_cluster_3036 0.71 0.2 0.05 
+CL_cluster_3037 0.71 0.2 0.05 
+CL_cluster_3038 0.71 0.2 0.05 
+CL_cluster_3039 0.71 0.2 0.05 
+CL_cluster_3040 0.71 0.2 0.05 
+CL_cluster_3041 0.71 0.2 0.05 
+CL_cluster_3042 0.71 0.2 0.05 
+CL_cluster_3043 0.71 0.2 0.05 
+CL_cluster_3044 0.71 0.2 0.05 
+CL_cluster_3045 0.71 0.2 0.05 
+CL_cluster_3046 0.71 0.2 0.05 
+CL_cluster_3047 0.71 0.2 0.05 
+CL_cluster_3048 0.71 0.2 0.05 
+CL_cluster_3049 0.71 0.2 0.05 
+CL_cluster_3050 0.71 0.2 0.05 
+CL_cluster_3051 0.71 0.2 0.05 
+CL_cluster_3052 0.71 0.2 0.05 
+CL_cluster_3053 0.71 0.2 0.05 
+CL_cluster_3054 0.71 0.2 0.05 
+CL_cluster_3055 0.71 0.2 0.05 
+CL_cluster_3056 0.71 0.2 0.05 
+CL_cluster_3057 0.71 0.2 0.05 
+CL_cluster_3058 0.71 0.2 0.05 
+CL_cluster_3059 0.71 0.2 0.05 
+CL_cluster_3060 0.71 0.2 0.05 
+CL_cluster_3061 0.71 0.2 0.05 
+CL_cluster_3062 0.71 0.2 0.05 
+CL_cluster_3063 0.71 0.2 0.05 
+CL_cluster_3064 0.71 0.2 0.05 
+CL_cluster_3065 0.71 0.2 0.05 
+CL_cluster_3066 0.71 0.2 0.05 
+CL_cluster_3067 0.71 0.2 0.05 
+CL_cluster_3068 0.71 0.2 0.05 
+CL_cluster_3069 0.71 0.2 0.05 
+CL_cluster_3070 0.71 0.2 0.05 
+CL_cluster_3071 0.71 0.2 0.05 
+CL_cluster_3072 0.71 0.2 0.05 
+CL_cluster_3073 0.71 0.2 0.05 
+CL_cluster_3074 0.71 0.2 0.05 
+CL_cluster_3075 0.71 0.2 0.05 
+CL_cluster_3076 0.71 0.2 0.05 
+CL_cluster_3077 0.71 0.2 0.05 
+CL_cluster_3078 0.71 0.2 0.05 
+CL_cluster_3079 0.71 0.2 0.05 
+CL_cluster_3080 0.71 0.2 0.05 
+CL_cluster_3081 0.71 0.2 0.05 
+CL_cluster_3082 0.71 0.2 0.05 
+CL_cluster_3083 0.71 0.2 0.05 
+CL_cluster_3084 0.71 0.2 0.05 
+CL_cluster_3085 0.71 0.2 0.05 
+CL_cluster_3086 0.71 0.2 0.05 
+CL_cluster_3087 0.71 0.2 0.05 
+CL_cluster_3088 0.71 0.2 0.05 
+CL_cluster_3089 0.71 0.2 0.05 
+CL_cluster_3090 0.71 0.2 0.05 
+CL_cluster_3091 0.71 0.2 0.05 
+CL_cluster_3092 0.71 0.2 0.05 
+CL_cluster_3093 0.71 0.2 0.05 
+CL_cluster_3094 0.71 0.2 0.05 
+CL_cluster_3095 0.71 0.2 0.05 
+CL_cluster_3096 0.71 0.2 0.05 
+CL_cluster_3097 0.71 0.2 0.05 
+CL_cluster_3098 0.71 0.2 0.05 
+CL_cluster_3099 0.71 0.2 0.05 
+CL_cluster_3100 0.71 0.2 0.05 
+CL_cluster_3101 0.71 0.2 0.05 
+CL_cluster_3102 0.71 0.2 0.05 
+CL_cluster_3103 0.71 0.2 0.05 
+CL_cluster_3104 0.71 0.2 0.05 
+CL_cluster_3105 0.71 0.2 0.05 
+CL_cluster_3106 0.71 0.2 0.05 
+CL_cluster_3107 0.71 0.2 0.05 
+CL_cluster_3108 0.71 0.2 0.05 
+CL_cluster_3109 0.71 0.2 0.05 
+CL_cluster_3110 0.71 0.2 0.05 
+CL_cluster_3111 0.71 0.2 0.05 
+CL_cluster_3112 0.71 0.2 0.05 
+CL_cluster_3113 0.71 0.2 0.05 
+CL_cluster_3114 0.71 0.2 0.05 
+CL_cluster_3115 0.71 0.2 0.05 
+CL_cluster_3204 0.71 0.2 0.05 
+CL_cluster_3205 0.71 0.2 0.05 
+CL_cluster_3212 0.71 0.2 0.05 
+CL_cluster_3711 0.71 0.2 0.05 
+CL_cluster_3731 0.71 0.2 0.05 
+CL_cluster_3732 0.71 0.2 0.05 
+CL_cluster_7797 0.71 0.2 0.05 
+CL_cluster_7876 0.71 0.2 0.05 
+CL_cluster_7904 0.71 0.2 0.05 
+CL_cluster_7923 0.71 0.2 0.05 
+;
+
+param:	O2_0   O2_1   O2_3 :=
+SHC1 0.65 0.2 0.1 
+;
+
+param:	O3_0   O3_1   O3_2 :=
+THC1 0.8 0.1 0.05 
+;
+
+param MAX_TELE_PHC := 0.05;
+param MAX_TELE_SHC := 0.05;
+param MAX_TELE_THC := 0.05;
+param MAX_HOME_PHC := 1;
+param MAX_HOME_SHC := 0.15;
+param MAX_HOME_THC := 0.05;
+end;

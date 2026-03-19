@@ -1,0 +1,5 @@
+Location	Team	Qty
+[PHC4]	eSF	2.00
+[PHC4]	ACS	6.00
+[PHC6]	ACS	4.00
+[PHC9]*	eSB	2.00

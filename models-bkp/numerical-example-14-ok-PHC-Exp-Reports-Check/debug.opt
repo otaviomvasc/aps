@@ -1,0 +1,6 @@
+primal_feasibility_tolerance=1e-9
+dual_feasibility_tolerance=1e-9
+user_objective_scale=-26
+user_bound_scale=-8
+random_seed=5
+highs_analysis_level=128
