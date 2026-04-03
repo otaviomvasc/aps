@@ -1,0 +1,3 @@
+@echo off
+echo Running AMPL-Gurobi ...
+call ampl aps.run

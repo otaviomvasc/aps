@@ -1,0 +1,21 @@
+mip_rel_gap=0.3
+time_limit=10000
+write_solution_style=2
+solution_file=aps.sol
+log_file=log_highs.log
+user_bound_scale = -10
+
+mip_heuristic_effort = 0.5    
+
+primal_feasibility_tolerance = 1e-6
+dual_feasibility_tolerance = 1e-6
+small_matrix_value = 1e-10
+large_matrix_value = 1e+10
+mip_feasibility_tolerance = 1e-6
+
+presolve = on
+mip_max_nodes = 50000                 
+mip_max_leaves = 500
+
+parallel = on
+threads = 4

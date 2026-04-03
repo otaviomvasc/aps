@@ -1,0 +1,43 @@
+# ========== FEASIBILITY FOCUS ==========
+# Relax gap to find feasible solution faster
+mip_rel_gap = 0.3
+mip_abs_gap = 10000
+
+# Time limit (10 seconds for quick feasibility, adjust as needed)
+time_limit = 10
+
+# ========== HEURISTICS ==========
+# Enable all heuristics for feasible solutions
+mip_heuristic_effort = 0.1          # 0.0-1.0, higher = more effort (0.1 is fast)
+
+# Feasibility pump (very effective for finding feasible solutions)
+mip_feasibility_pump_effort = 0.5   # 0.0-1.0, 0.5 gives good balance
+
+# ========== NUMERICAL STABILITY ==========
+# Critical for your model with tiny coefficients
+primal_feasibility_tolerance = 1e-6
+dual_feasibility_tolerance = 1e-6
+small_matrix_value = 1e-10
+large_matrix_value = 1e+10
+mip_feasibility_tolerance = 1e-6
+
+# ========== PRESOLVE ==========
+# Keep presolve on but don't be too aggressive
+presolve = on
+
+# ========== BRANCHING ==========
+# Use aggressive branching for feasibility
+mip_max_nodes = 5000                 # Limit nodes for speed
+mip_max_leaves = 500
+
+# ========== PARALLEL ==========
+# Use multiple threads for heuristics
+parallel = on
+threads = 4
+
+# ========== OUTPUT ==========
+write_solution_style = 2
+solution_file = aps.sol
+log_file = log_highs.log
+log_to_console = on
+output_flag = on

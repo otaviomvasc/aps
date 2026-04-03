@@ -1,0 +1,2 @@
+Loc	Team	CNES	Req	Transf	New	Res	Surp	Def
+[THC1]	EQ3	100.0	27.00	0.0	0.0	100.0	72.9	0.0

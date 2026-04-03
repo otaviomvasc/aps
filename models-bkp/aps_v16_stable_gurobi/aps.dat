@@ -17,6 +17,8 @@ data;
 # BUDGET, INVESTMENT PARAMETER
 param BUDGET := 10000000; # Overall budget constraint ($/year)
 param I_L1 := 3818078;
+param I_L1_exp := 1200000;     # Investment to expand existing PHC by 1 SIZE unit (R$/unit)
+                                # (~31% of new-build cost: reform/renovation, no land/infra)
 ################################################
 
 # Health care levels (PHC, SHC, THC)
@@ -30,7 +32,6 @@ param: K: Dmax :=
 # set L[1] := PHC1 PHC2 PHC3 PHC4 PHC5 PHC6 PHC7 PHC8 PHC9 PHC10;
 # set L[2] := SHC1 SHC2 SHC3 SHC4 SHC5 SHC6 SHC7 SHC8;
 # set L[3] := THC1 THC2 THC3 THC4 THC5 THC6;
-
 
 # Basic health care units teams (PHC)
 set E[1] :=
@@ -55,33 +56,33 @@ DE3 # Dentist
 ;
 
 # EXISTING health care units on three levels
-set EL[1] := CNES1 CNES2 CNES3 CNES4 CNES5 CNES6;
-set EL[2] := SCNES1 SCNES2 SCNES3 SCNES4;
-set EL[3] := TCNES1 TCNES2 TCNES3;
+set EL[1] := PHC1 PHC2 PHC3 PHC4 PHC5 PHC6;
+set EL[2] := SHC1 SHC2 SHC3 SHC4;
+set EL[3] := THC1 THC2 THC3;
 
 # CANDIDADE health care LOCATIONS on three levels
-set CL[1] := CLUS7 CLUS8 CLUS9 CLUS10;
+set CL[1] := PHC7 PHC8 PHC9 PHC10;
 set CL[2] := SHC5 SHC6 SHC7 SHC8;
 set CL[3] := THC4 THC5 THC6;
 
 # of type p at demand point i and 
 # vulnerability V (the higher vulnerability, the worse)	
 param:I:    W       IVS:=	
-CLUS1           1000 	0.323
-CLUS2           3000 	0.337
-CLUS3           2000 	0.461
-CLUS4           4000 	0.357
-CLUS5           1000 	0.323
-CLUS6           1000 	0.427
-CLUS7           2000 	0.601
-CLUS8           3000 	0.413
-CLUS9           3000 	0.409
-CLUS10          2000 	0.305
-CLUS11          1000 	0.420
-CLUS12          2000 	0.334
-CLUS13          3000 	0.301
-CLUS14          4000 	0.298
-CLUS15          5000 	0.422
+1           1000 	0.323
+2           3000 	0.337
+3           2000 	0.461
+4           4000 	0.357
+5           1000 	0.323
+6           1000 	0.427
+7           2000 	0.601
+8           3000 	0.413
+9           3000 	0.409
+10          2000 	0.305
+11          1000 	0.420
+12          2000 	0.334
+13          3000 	0.301
+14          4000 	0.298
+15          5000 	0.422
 ;
 
 # # Variable cost of PHC j / patient 
@@ -92,10 +93,10 @@ PHC3	3       2		2	.
 PHC4	4       1		1	.
 PHC5	5       2		2	.
 PHC6	6       1		1	.
-PHC7	7       2		3	.
-PHC8	8       2		5	.
-PHC9	9       2		5	.
-PHC10	10      5		10	.
+PHC7	7       .		3	.
+PHC8	8       .		5	.
+PHC9	9       .		5	.
+PHC10	10      .		10	.
 ;
 
 param:	ITEM2   FC2		VC2:=	
@@ -142,6 +143,7 @@ DE3     3
 ;
 
 param D0_1:=
+# I x L[1]: 15 x 10 = 150 pairs
 1	PHC1	9291
 1	PHC2	11034
 1	PHC3	14645
@@ -295,6 +297,7 @@ param D0_1:=
 ;
 
 param D0_2:=
+# I x L[2]: 15 x 8 = 120 pairs
 1	SHC1	19096
 1	SHC2	26366
 1	SHC3	82121
@@ -418,6 +421,7 @@ param D0_2:=
 ;
 
 param D0_3:=
+# I x L[3]: 15 x 6 = 90 pairs
 1	THC1	28183
 1	THC2	68877
 1	THC3	32096
@@ -511,6 +515,7 @@ param D0_3:=
 ;
 
 param D1_2:= 
+# L[1] x L[2]: 10 x 8 = 80 pairs
 PHC1	SHC1	22884
 PHC1	SHC2	14300
 PHC1	SHC3	24696
@@ -594,6 +599,7 @@ PHC10	SHC8	13758
 ;
 
 param D1_3:=
+# L[1] x L[3]: 10 x 6 = 60 pairs
 PHC1	THC1	99506
 PHC1	THC2	49359
 PHC1	THC3	28740
@@ -657,6 +663,7 @@ PHC10	THC6	48905
 ;
 
 param D2_3:= 
+# L[2] x L[3]: 8 x 6 = 48 pairs
 SHC1	THC1	44878
 SHC1	THC2	46949
 SHC1	THC3	16214
@@ -708,6 +715,7 @@ SHC8	THC6	24363
 ;
 
 param DL1:=
+# EL[1] x L[1]: 6 x 10 = 60 pairs
 PHC1	PHC1	0
 PHC1	PHC2	25490
 PHC1	PHC3	6485
@@ -772,6 +780,7 @@ PHC6	PHC10	6033
 
 
 param DL2:=
+# EL[2] x L[2]: 4 x 8 = 32 pairs
 SHC1	SHC1	0
 SHC1	SHC2	29092
 SHC1	SHC3	56923
@@ -807,6 +816,7 @@ SHC4	SHC8	16671
 ;
 
 param DL3:=
+# EL[3] x L[3]: 3 x 6 = 18 pairs
 THC1	THC1	0
 THC1	THC2	56121
 THC1	THC3	53150
